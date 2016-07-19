@@ -1,6 +1,6 @@
     README file for the `itcp' GAP4 package
 
-This Package provides a routines to construct explicit polyhedral
+This Package provides routines to construct explicit polyhedral
 converses via polyhedral projection. It dependends on GAP packages
 symchm (for symmetry exploiting polyhedral projection) and
 qsopt_ex-interface (for exact rational LPs). These packages and their
