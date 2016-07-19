@@ -555,15 +555,15 @@ RRparse:=function(nc,rr)
       for i in [nc[2]+1..nc[3]] do
         if -row[i]>0 then
           if -row[i]=1 then
-            displaystr:=Concatenation(displaystr,"+R",String(i)," ");
+            displaystr:=Concatenation(displaystr,"+ R",String(i)," ");
           else
-            displaystr:=Concatenation(displaystr,"+",String(-row[i]),"R",String(i)," ");
+            displaystr:=Concatenation(displaystr,"+",String(-row[i])," R",String(i)," ");
           fi;
         elif -row[i]<0 then
           if -row[i]=-1 then
-            displaystr:=Concatenation(displaystr,"-R",String(i)," ");
+            displaystr:=Concatenation(displaystr,"- R",String(i)," ");
           else
-            displaystr:=Concatenation(displaystr,String(-row[i]),"R",String(i)," ");
+            displaystr:=Concatenation(displaystr,String(-row[i])," R",String(i)," ");
           fi;
         fi;
       od;
@@ -575,15 +575,15 @@ RRparse:=function(nc,rr)
       for i in [1..nc[2]] do
         if row[i]>0 then
           if row[i]=1 then
-            displaystr:=Concatenation(displaystr,"+w",String(i)," ");
+            displaystr:=Concatenation(displaystr,"+ w",String(i)," ");
           else
-            displaystr:=Concatenation(displaystr,"+",String(row[i]),"w",String(i)," ");
+            displaystr:=Concatenation(displaystr,"+",String(row[i])," w",String(i)," ");
           fi;
         elif row[i]<0 then
           if row[i]=-1 then
-            displaystr:=Concatenation(displaystr,"-w",String(i)," ");
+            displaystr:=Concatenation(displaystr,"- w",String(i)," ");
           else
-            displaystr:=Concatenation(displaystr,String(row[i]),"w",String(i)," ");
+            displaystr:=Concatenation(displaystr,String(row[i])," w",String(i)," ");
           fi;
         fi;
       od;
