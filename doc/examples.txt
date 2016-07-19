@@ -1,0 +1,102 @@
+#!##NetSymGroup
+#! @BeginExample
+# Define a size 8 IDSC instance
+idsc:=[ [ [ [ 1, 2, 3 ], [ 1, 2, 3, 4, 5, 6, 7, 8 ] ],\
+      [ [ 4, 5 ], [ 1, 2, 4, 5 ] ], [ [ 5, 6 ], [ 1, 2, 5, 6 ] ],\
+      [ [ 6, 7 ], [ 1, 2, 6, 7 ] ], [ [ 7, 8 ], [ 1, 2, 7, 8 ] ],\
+      [ [ 4, 8 ], [ 1, 2, 4, 8 ] ], [ [ 4, 6 ], [ 3, 4, 6 ] ],\
+      [ [ 5, 8 ], [ 3, 5, 8 ] ], [ [ 4, 7 ], [ 3, 4, 7 ] ],\
+      [ [ 5, 7 ], [ 3, 5, 7 ] ], [ [ 6, 8 ], [ 3, 6, 8 ] ] ], 3, 8 ];
+G:=NetSymGroup(idsc);
+#! Group([ (5,8)(6,7), (4,5)(6,8), (4,6)(7,8), (1,2) ])
+Size(G);
+#! 20
+#! @EndExample
+
+#!##NCRateRegionOB
+#! @BeginExample
+# define a network instance (in this case, Fano network)
+F:=[ [ [ [ 1, 2 ], [ 1, 2, 4 ] ], [ [ 2, 3 ], [ 2, 3, 5 ] ],\
+      [ [ 4, 5 ], [ 4, 5, 6 ] ], [ [ 3, 4 ], [ 3, 4, 7 ] ],\
+      [ [ 1, 6 ], [ 3, 1, 6 ] ], [ [ 6, 7 ], [ 2, 6, 7 ] ],\
+      [ [ 5, 7 ], [ 1, 5, 7 ] ] ], 3, 7 ];;
+rlist:=NCRateRegionOB(F,true,[]);;
+Display(rlist[2]);
+#! 0 >= -w2
+#! 0 >= -w1
+#! 0 >= -w3
+#! +R6 >= +w3
+#! +R5 >= +w3
+#! +R7 >= +w1
+#! +R4 >= +w1
+#! +R6 +R7 >= +w2 +w3
+#! +R4 +R6 >= +w2 +w3
+#! +R4 +R5 >= +w2 +w3
+#! +R6 +R7 >= +w1 +w2
+#! +R4 +R6 >= +w1 +w2
+#! +R4 +R5 >= +w1 +w2
+# Define a size 8 IDSC instance with NSG isomorphic to S2 X D5
+idsc:=[ [ [ [ 1, 2, 3 ], [ 1, 2, 3, 4, 5, 6, 7, 8 ] ],\
+      [ [ 4, 5 ], [ 1, 2, 4, 5 ] ], [ [ 5, 6 ], [ 1, 2, 5, 6 ] ],\
+      [ [ 6, 7 ], [ 1, 2, 6, 7 ] ], [ [ 7, 8 ], [ 1, 2, 7, 8 ] ],\
+      [ [ 4, 8 ], [ 1, 2, 4, 8 ] ], [ [ 4, 6 ], [ 3, 4, 6 ] ],\
+      [ [ 5, 8 ], [ 3, 5, 8 ] ], [ [ 4, 7 ], [ 3, 4, 7 ] ],\
+      [ [ 5, 7 ], [ 3, 5, 7 ] ], [ [ 6, 8 ], [ 3, 6, 8 ] ] ], 3, 8 ];
+rlist1:=NCRateRegionOB2(idsc,true,[]);;
+Display(rlist1[2]);
+#! 0 >= -w2
+#! 0 >= -w3
+#! +R4 >= 0
+#! +R4 +R6 >= +w3
+#! +R4 +R5 >= +w1 +w2
+#! +R4 +1/2R5 +1/2R8 >= +w1 +w2 +1/2w3
+#! +1/2R4 +1/2R5 +1/2R6 +1/2R7 >= +w1 +w2 +1/2w3
+#! +2/3R4 +2/3R5 +1/3R6 +1/3R8 >= +w1 +w2 +2/3w3
+#! +2/3R4 +1/3R5 +1/3R6 +1/3R7 +1/3R8 >= +w1 +w2 +2/3w3
+#! +1/2R4 +1/2R5 +1/2R6 +1/4R7 +1/4R8 >= +w1 +w2 +3/4w3
+#! +R4 +1/2R5 +1/2R6 +1/2R7 >= +w1 +w2 +w3
+#! +R4 +1/2R5 +1/2R6 +1/2R8 >= +w1 +w2 +w3
+#! +R4 +1/3R5 +1/3R6 +1/3R7 +1/3R8 >= +w1 +w2 +w3
+#! +2/3R4 +2/3R5 +1/3R6 +2/3R7 +1/3R8 >= +w1 +w2 +4/3w3
+#! +R4 +1/2R5 +1/2R6 +R7 >= +w1 +w2 +3/2w3
+#! +R4 +1/2R5 +1/2R6 +1/2R7 +1/2R8 >= +w1 +w2 +3/2w3
+#! +2R4 +R6 +R7 >= +w1 +w2 +2w3
+#! +R4 +R5 +R6 +R7 >= +w1 +w2 +2w3
+#! @EndExample
+
+#!##NCSumRateUB
+#! @BeginExample
+# define a network instance
+N:= [[ [ [ 1 ], [ 1, 3 ] ], [ [ 1 ], [ 1, 4 ] ],[ [ 1, 2, 5 ],\
+      [ 1, 2 ] ],[ [ 1, 2, 3 ], [ 2, 3 ] ],[ [ 2, 4 ], [ 1, 2, 4 ] ],\
+      [ [ 2, 3, 4, 5 ], [ 3, 4, 5 ] ]] , 2, 5 ];;
+ub:=NCSumRateUB(N,[1,1,1],[]);;
+#! Original LP dimension...28
+#! LP dimension after considering symmetries...22
+ub;
+#! 2
+#! @EndExample
+
+#!##SSWorstInfoRatioLB
+#! @BeginExample
+# define an access structure
+Asets:=[[2,3],[3,4],[4,5]];;
+lb:=SSWorstInfoRatioLB(Asets,5,[]);;
+#! Original LP dimension...20
+#! LP dimension after considering symmetries...12
+lb;
+#! 3/2
+#! @EndExample
+
+#!##GGnumberUB
+#! @BeginExample
+# define a directed graph (in this case, the cycle graph C5)
+C5:=[ [ 1, 2, 3, 4, 5 ],\
+  rec( 1 := [ 2, 5 ], 2 := [ 1, 3 ], 3 := [ 2, 4 ],\
+      4 := [ 3, 5 ], 5 := [ 4, 1 ] ) ];;
+ub:=GGnumberUB(C5,[]);;
+#! Original LP dimension...25
+#! LP dimension after considering symmetries...5
+ub;
+#! 5/2
+#! @EndExample

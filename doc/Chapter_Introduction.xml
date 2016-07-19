@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This is an automatically generated file. -->
+<Chapter Label="Chapter_Introduction">
+<Heading>Introduction</Heading>
+
+ITCP stands for Information Theoretic Converse Prover. Several converse proofs, like those arising in
+multi-source network coding over directed acyclic hypergraphs, distributed storage, secret sharing, and graph guessing games etc.,
+can be divided into two parts: 1) What to prove? 2) How to prove? ITCP is a software that allows
+one to use a computer to generate sensible statements of converse proofs i.e. part 1). The actual proof, i.e. part 2), can
+then be generated using Yeung's framework <Cite Key="yeunginfoframework"/> and linear programming duality (see eg. <Cite Key="lihmsnc"/>, <Cite Key="TianJSAC433"/>). Currently, it supports the following types of converse proofs:
+<List>
+<Item>
+Polyhedral Converse (Network Coding): Given a multi-source network coding instance, determine the tightest
+set of inequalities amoungst source rate and edge capacity variables that
+are implied by Shannon-type and (if specified) given non-Shannnon-type information
+inequalities
+</Item>
+<Item>
+Sum-rate Converse (Network Coding): Given a multi-source network coding instance, determine
+the least upper bound on the sum of source rates, implied by Shannon-type and (if specified) given non-Shannnon-type information
+inequalities, under specified edge capacities.
+</Item>
+<Item>
+Worst-case information ratio lower bounds (Secret Sharing): Given an access structure, determine the greatest
+lower bound on the workst case information ratio implied by Shannon-type and (if specified) given non-Shannnon-type information
+inequalities
+</Item>
+<Item>
+Guessing Number upper bounds (Guessing Games played on directed graphs): Given a directed graph, determine the
+least upper bound on its guessing number implied by Shannon-type and (if specified) given non-Shannnon-type information
+inequalities
+</Item>
+</List>
+The last three types of converse proofs can be performed by using linear programming techniques. This involves solving a linear program,
+whose optimum value gives us an upper (lower) bound. Then, one uses dual optimal vertex to provide a human readable proof that tells us how to
+combine various information inequalities to arrive at the aforementioned upper (lower) bound. For the first type of converse proof, however,
+one requires more sophisticated tools. For that purpose, ITCP uses polyhedral projection algorithm symchm, implemented in another GAP package that goes by The
+same name. In all of the problems mentioned above, one has to either project or solve linear programs over polytopes that have exponentially many dimensions
+compared to the problem size. A key feature of ITCP is automatic detection of problem symmetries and symmetry exploitation to reduce the ComplexityOfAlgebra
+of solving the above problems, so that one can approach ever larger problems from a computational perspective.
+</Chapter>
+

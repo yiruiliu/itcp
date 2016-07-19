@@ -1,0 +1,19 @@
+#SIXFORMAT  GapDocGAP
+HELPBOOKINFOSIXTMP := rec(
+encoding := "UTF-8",
+bookname := "itcp",
+entries :=
+[ [ "Title page", ".", [ 0, 0, 0 ], 1, 1, "title page", "X7D2C85EC87DD46E5" ], [ "Table of Contents", ".-1", [ 0, 0, 1 ], 29, 2, "table of contents", 
+      "X8537FEB07AF2BEC8" ], [ "\033[1X\033[33X\033[0;-2YIntroduction\033[133X\033[101X", "1", [ 1, 0, 0 ], 1, 3, "introduction", "X7DFB63A97E67C0A1" ], 
+  [ "\033[1X\033[33X\033[0;-2YInstallation\033[133X\033[101X", "2", [ 2, 0, 0 ], 1, 4, "installation", "X8360C04082558A12" ], 
+  [ "\033[1X\033[33X\033[0;-2YUsage\033[133X\033[101X", "3", [ 3, 0, 0 ], 1, 5, "usage", "X86A9B6F87E619FFF" ], 
+  [ "\033[1X\033[33X\033[0;-2YAvailable functions\033[133X\033[101X", "3.1", [ 3, 1, 0 ], 4, 5, "available functions", "X835D65A88292737E" ], 
+  [ "Bibliography", "bib", [ "Bib", 0, 0 ], 1, 10, "bibliography", "X7A6F98FD85F02BFE" ], 
+  [ "References", "bib", [ "Bib", 0, 0 ], 1, 10, "references", "X7A6F98FD85F02BFE" ], [ "Index", "ind", [ "Ind", 0, 0 ], 1, 11, "index", "X83A0356F839C696F" ]
+    , [ "\033[5Xitcp\033[105X", ".-1", [ 0, 0, 1 ], 29, 2, "itcp", "X8537FEB07AF2BEC8" ], 
+  [ "\033[2XNetSymGroup\033[102X", "3.1-1", [ 3, 1, 1 ], 9, 5, "netsymgroup", "X8612CAE37A80ED69" ], 
+  [ "\033[2XNCRateRegionOB\033[102X", "3.1-2", [ 3, 1, 2 ], 50, 6, "ncrateregionob", "X80313471845C1802" ], 
+  [ "\033[2XNCSumRateUB\033[102X", "3.1-3", [ 3, 1, 3 ], 144, 7, "ncsumrateub", "X7FB28EC487F9B726" ], 
+  [ "\033[2XSSWorstInfoRatioLB\033[102X", "3.1-4", [ 3, 1, 4 ], 184, 8, "ssworstinforatiolb", "X7E814076838B30E8" ], 
+  [ "\033[2XGGnumberUB\033[102X", "3.1-5", [ 3, 1, 5 ], 217, 8, "ggnumberub", "X798F99DF78E91283" ] ]
+);

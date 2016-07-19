@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<title>GAP (itcp) - Chapter 3: Usage</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="GAPDoc2HTML" />
+<link rel="stylesheet" type="text/css" href="manual.css" />
+<script src="manual.js" type="text/javascript"></script>
+<script type="text/javascript">overwriteStyle();</script>
+</head>
+<body class="chap3"  onload="jscontent()">
+
+
+<div class="chlinktop"><span class="chlink1">Goto Chapter: </span><a href="chap0_mj.html">Top</a>  <a href="chap1_mj.html">1</a>  <a href="chap2_mj.html">2</a>  <a href="chap3_mj.html">3</a>  <a href="chapBib_mj.html">Bib</a>  <a href="chapInd_mj.html">Ind</a>  </div>
+
+<div class="chlinkprevnexttop">&nbsp;<a href="chap0_mj.html">[Top of Book]</a>&nbsp;  <a href="chap0_mj.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap2_mj.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chapBib_mj.html">[Next Chapter]</a>&nbsp;  </div>
+
+<p id="mathjaxlink" class="pcenter"><a href="chap3.html">[MathJax off]</a></p>
+<p><a id="X86A9B6F87E619FFF" name="X86A9B6F87E619FFF"></a></p>
+<div class="ChapSects"><a href="chap3_mj.html#X86A9B6F87E619FFF">3 <span class="Heading">Usage</span></a>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap3_mj.html#X835D65A88292737E">3.1 <span class="Heading">Available functions</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X8612CAE37A80ED69">3.1-1 NetSymGroup</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X80313471845C1802">3.1-2 NCRateRegionOB</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X7FB28EC487F9B726">3.1-3 NCSumRateUB</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X7E814076838B30E8">3.1-4 SSWorstInfoRatioLB</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X798F99DF78E91283">3.1-5 GGnumberUB</a></span>
+</div></div>
+</div>
+
+<h3>3 <span class="Heading">Usage</span></h3>
+
+<p><a id="X835D65A88292737E" name="X835D65A88292737E"></a></p>
+
+<h4>3.1 <span class="Heading">Available functions</span></h4>
+
+<p>In this section we shall look at the functions provided by ITCP.</p>
+
+<p><a id="X8612CAE37A80ED69" name="X8612CAE37A80ED69"></a></p>
+
+<h5>3.1-1 NetSymGroup</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; NetSymGroup</code>( <var class="Arg">ncinstance</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: A group</p>
+
+<p>This function finds the Network Symmetry Group of the input network instance bounding the rate region of an instance of mult-source network coding on directed acyclic hypergraphs. It accepts following arguments:</p>
+
+
+<ul>
+<li><p><span class="SimpleMath">\(ncinstance\)</span> is a list <span class="SimpleMath">\([cons,nsrc,nvars]\)</span> containing 3 elements:</p>
+
+
+<ul>
+<li><p><span class="SimpleMath">\(cons\)</span> is a list of network coding constraints.</p>
+
+</li>
+<li><p><span class="SimpleMath">\(nsrc\)</span> is the number of sources.</p>
+
+</li>
+<li><p><span class="SimpleMath">\(nvars\)</span> is the number of random variables associated with the network.</p>
+
+</li>
+</ul>
+</li>
+</ul>
+<p>Returns a subgroup of symmetric group of <span class="SimpleMath">\(nvars\)</span> labels</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput"># Define a size 8 IDSC instance</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">idsc:=[ [ [ [ 1, 2, 3 ], [ 1, 2, 3, 4, 5, 6, 7, 8 ] ],\</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">      [ [ 4, 5 ], [ 1, 2, 4, 5 ] ], [ [ 5, 6 ], [ 1, 2, 5, 6 ] ],\</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">      [ [ 6, 7 ], [ 1, 2, 6, 7 ] ], [ [ 7, 8 ], [ 1, 2, 7, 8 ] ],\</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">      [ [ 4, 8 ], [ 1, 2, 4, 8 ] ], [ [ 4, 6 ], [ 3, 4, 6 ] ],\</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">      [ [ 5, 8 ], [ 3, 5, 8 ] ], [ [ 4, 7 ], [ 3, 4, 7 ] ],\</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">      [ [ 5, 7 ], [ 3, 5, 7 ] ], [ [ 6, 8 ], [ 3, 6, 8 ] ] ], 3, 8 ];</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">G:=NetSymGroup(idsc);</span>
+Group([ (5,8)(6,7), (4,5)(6,8), (4,6)(7,8), (1,2) ])
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Size(G);</span>
+20
+</pre></div>
+
+<p><span class="SimpleMath">\(\textbf{NOTE 1:}\)</span> Certain naming convensions are followed while defining network coding instances. The source messages are labeled with <span class="SimpleMath">\([1...nsrc]\)</span> while rest of the messages are labeled <span class="SimpleMath">\([nsrc...nvars]\)</span>. Furthermore, the list <span class="SimpleMath">\(cons\)</span> includes all network constraints except source independence. This constraint is implied with the labeling i.e. ITAP enforces it by default for the messages labeled <span class="SimpleMath">\([1...nsrc]\)</span>.</p>
+
+<p><a id="X80313471845C1802" name="X80313471845C1802"></a></p>
+
+<h5>3.1-2 NCRateRegionOB</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; NCRateRegionOB</code>( <var class="Arg">ncinstance</var>, <var class="Arg">usesym</var>, <var class="Arg">optargs</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: A list</p>
+
+<p>This function finds the minimal (non-redundant) collection of inequalities bounding the rate region of an instance of mult-source network coding on directed acyclic hypergraphs. It accepts following arguments:</p>
+
+
+<ul>
+<li><p><span class="SimpleMath">\(ncinstance\)</span> is a list <span class="SimpleMath">\([cons,nsrc,nvars]\)</span> containing 3 elements:</p>
+
+
+<ul>
+<li><p><span class="SimpleMath">\(cons\)</span> is a list of network coding constraints.</p>
+
+</li>
+<li><p><span class="SimpleMath">\(nsrc\)</span> is the number of sources.</p>
+
+</li>
+<li><p><span class="SimpleMath">\(nvars\)</span> is the number of random variables associated with the network.</p>
+
+</li>
+</ul>
+</li>
+<li><p><span class="SimpleMath">\(usesym\)</span> is a boolean indicating whether symmetry should be used in computation</p>
+
+</li>
+<li><p><span class="SimpleMath">\(optargs\)</span> is a list of optional arguments <span class="SimpleMath">\([nsrec,..]\)</span> where <span class="SimpleMath">\(nsrec\)</span>, when specified, is a GAP record that specifies any non-Shannon type information inequalities to be included in the computation.</p>
+
+</li>
+</ul>
+<p>Returns a list <span class="SimpleMath">\([rr,rrstring]\)</span> where <span class="SimpleMath">\(rr\)</span> is a list of normal vectors of the inequalities bounding the rate region, that are inequivalent under the Network Symmetry Group of <span class="SimpleMath">\(ncinstance\)</span> if <span class="SimpleMath">\(usesym\)</span> is true, otherwise <span class="SimpleMath">\(rr\)</span> contains all such normal vectors, under assumption of no symmetries. <span class="SimpleMath">\(rrstring\)</span> is a string that can be used to display inequalities associated with <span class="SimpleMath">\(rr\)</span> in an easier to read format.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput"># define a network instance (in this case, Fano network)</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">F:=[ [ [ [ 1, 2 ], [ 1, 2, 4 ] ], [ [ 2, 3 ], [ 2, 3, 5 ] ],\</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">      [ [ 4, 5 ], [ 4, 5, 6 ] ], [ [ 3, 4 ], [ 3, 4, 7 ] ],\</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">      [ [ 1, 6 ], [ 3, 1, 6 ] ], [ [ 6, 7 ], [ 2, 6, 7 ] ],\</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">      [ [ 5, 7 ], [ 1, 5, 7 ] ] ], 3, 7 ];;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">rlist:=NCRateRegionOB(F,true,[]);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Display(rlist[2]);</span>
+0 &gt;= -w2
+0 &gt;= -w1
+0 &gt;= -w3
++R6 &gt;= +w3
++R5 &gt;= +w3
++R7 &gt;= +w1
++R4 &gt;= +w1
++R6 +R7 &gt;= +w2 +w3
++R4 +R6 &gt;= +w2 +w3
++R4 +R5 &gt;= +w2 +w3
++R6 +R7 &gt;= +w1 +w2
++R4 +R6 &gt;= +w1 +w2
++R4 +R5 &gt;= +w1 +w2
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput"># Define a size 8 IDSC instance with NSG isomorphic to S2 X D5</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">idsc:=[ [ [ [ 1, 2, 3 ], [ 1, 2, 3, 4, 5, 6, 7, 8 ] ],\</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">      [ [ 4, 5 ], [ 1, 2, 4, 5 ] ], [ [ 5, 6 ], [ 1, 2, 5, 6 ] ],\</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">      [ [ 6, 7 ], [ 1, 2, 6, 7 ] ], [ [ 7, 8 ], [ 1, 2, 7, 8 ] ],\</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">      [ [ 4, 8 ], [ 1, 2, 4, 8 ] ], [ [ 4, 6 ], [ 3, 4, 6 ] ],\</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">      [ [ 5, 8 ], [ 3, 5, 8 ] ], [ [ 4, 7 ], [ 3, 4, 7 ] ],\</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">      [ [ 5, 7 ], [ 3, 5, 7 ] ], [ [ 6, 8 ], [ 3, 6, 8 ] ] ], 3, 8 ];</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">rlist1:=NCRateRegionOB2(idsc,true,[]);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Display(rlist1[2]);</span>
+0 &gt;= -w2
+0 &gt;= -w3
++R4 &gt;= 0
++R4 +R6 &gt;= +w3
++R4 +R5 &gt;= +w1 +w2
++R4 +1/2R5 +1/2R8 &gt;= +w1 +w2 +1/2w3
++1/2R4 +1/2R5 +1/2R6 +1/2R7 &gt;= +w1 +w2 +1/2w3
++2/3R4 +2/3R5 +1/3R6 +1/3R8 &gt;= +w1 +w2 +2/3w3
++2/3R4 +1/3R5 +1/3R6 +1/3R7 +1/3R8 &gt;= +w1 +w2 +2/3w3
++1/2R4 +1/2R5 +1/2R6 +1/4R7 +1/4R8 &gt;= +w1 +w2 +3/4w3
++R4 +1/2R5 +1/2R6 +1/2R7 &gt;= +w1 +w2 +w3
++R4 +1/2R5 +1/2R6 +1/2R8 &gt;= +w1 +w2 +w3
++R4 +1/3R5 +1/3R6 +1/3R7 +1/3R8 &gt;= +w1 +w2 +w3
++2/3R4 +2/3R5 +1/3R6 +2/3R7 +1/3R8 &gt;= +w1 +w2 +4/3w3
++R4 +1/2R5 +1/2R6 +R7 &gt;= +w1 +w2 +3/2w3
++R4 +1/2R5 +1/2R6 +1/2R7 +1/2R8 &gt;= +w1 +w2 +3/2w3
++2R4 +R6 +R7 &gt;= +w1 +w2 +2w3
++R4 +R5 +R6 +R7 &gt;= +w1 +w2 +2w3
+</pre></div>
+
+<p><span class="SimpleMath">\(\textbf{NOTE 2:}\)</span> Currently ITCP supports specifiation of non-Shannon ineqality of Zhang and Yeung <a href="chapBib_mj.html#biBzyineq97">[ZY97]</a> and 214 new non-Shannon inequalities found by Dougherty, Freiling and Zeger <a href="chapBib_mj.html#biBdfznonshannon">[DFZ11]</a>. These inequalities can be applied to any collection of 4 subsets of a given set of random variables. The keys of the record <span class="SimpleMath">\(nsrec\)</span> can be integers <span class="SimpleMath">\(1,...,215\)</span> where index <span class="SimpleMath">\(1\)</span> corresponds to the ZY inequality while <span class="SimpleMath">\(2,...,215\)</span> correspond to the inequalities found by Dougherty, Freiling and Zeger. The value associated wth each key is a list of 4-subsets of subsets of <span class="SimpleMath">\(nvars\)</span> random variables associated with the network. Internally, several permuted forms of these inequalities are created, so as to not break the symmetries of the network coding instance, that are exploited during the computation.</p>
+
+<p><a id="X7FB28EC487F9B726" name="X7FB28EC487F9B726"></a></p>
+
+<h5>3.1-3 NCSumRateUB</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; NCSumRateUB</code>( <var class="Arg">ncinstance</var>, <var class="Arg">caps</var>, <var class="Arg">optargs</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: A rational number</p>
+
+<p>This function finds least upper bound on the sum of all source rates that is implied by the Shannon-type and (if specified) the non-Shannon-type inequalities. It accepts following arguments:</p>
+
+
+<ul>
+<li><p><span class="SimpleMath">\(ncinstance\)</span> is a list <span class="SimpleMath">\([cons,nsrc,nvars]\)</span> containing 3 elements:</p>
+
+
+<ul>
+<li><p><span class="SimpleMath">\(cons\)</span> is a list of network coding constraints.</p>
+
+</li>
+<li><p><span class="SimpleMath">\(nsrc\)</span> is the number of sources.</p>
+
+</li>
+<li><p><span class="SimpleMath">\(nvars\)</span> is the number of random variables associated with the network.</p>
+
+</li>
+</ul>
+</li>
+<li><p><span class="SimpleMath">\(caps\)</span> is a list of <span class="SimpleMath">\(nvars-nsrc\)</span> non-negative integers, specifying the capacity of the edges</p>
+
+</li>
+<li><p><span class="SimpleMath">\(optargs\)</span> is a list of optional arguments <span class="SimpleMath">\([nsrec,..]\)</span> where <span class="SimpleMath">\(nsrec\)</span>, when specified, is a GAP record that specifies any non-Shannon type information inequalities to be included in the computation (see NOTE 2 for explanation of the format).</p>
+
+</li>
+</ul>
+<p>Returns a rational number specifying the upper bound</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput"># define a network instance</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">N:= [[ [ [ 1 ], [ 1, 3 ] ], [ [ 1 ], [ 1, 4 ] ],[ [ 1, 2, 5 ],\</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">      [ 1, 2 ] ],[ [ 1, 2, 3 ], [ 2, 3 ] ],[ [ 2, 4 ], [ 1, 2, 4 ] ],\</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">      [ [ 2, 3, 4, 5 ], [ 3, 4, 5 ] ]] , 2, 5 ];;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">ub:=NCSumRateUB(N,[1,1,1],[]);;</span>
+Original LP dimension...28
+LP dimension after considering symmetries...22
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">ub;</span>
+2
+</pre></div>
+
+<p><a id="X7E814076838B30E8" name="X7E814076838B30E8"></a></p>
+
+<h5>3.1-4 SSWorstInfoRatioLB</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; SSWorstInfoRatioLB</code>( <var class="Arg">Asets</var>, <var class="Arg">nvars</var>, <var class="Arg">optargs</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: A rational number specifying the lower bound</p>
+
+<p>This function finds the greatest lower bound on the worst case information ratio of a secret sharing instance.</p>
+
+
+<ul>
+<li><p><span class="SimpleMath">\(Asets\)</span> - A list of authorized sets each specified as a subset of <span class="SimpleMath">\([nvars-1]\)</span></p>
+
+</li>
+<li><p><span class="SimpleMath">\(nvars\)</span> - Number of participants (including one dealer)</p>
+
+</li>
+<li><p><span class="SimpleMath">\(optargs\)</span> is a list of optional arguments <span class="SimpleMath">\([nsrec,..]\)</span> where <span class="SimpleMath">\(nsrec\)</span>, when specified, is a GAP record that specifies</p>
+
+</li>
+</ul>
+<p>any non-Shannon type information inequalities to be included in the computation (see NOTE 2 for explanation of the format). Returns a rational number</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput"># define an access structure</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">Asets:=[[2,3],[3,4],[4,5]];;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">lb:=SSWorstInfoRatioLB(Asets,5,[]);;</span>
+Original LP dimension...20
+LP dimension after considering symmetries...12
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">lb;</span>
+3/2
+</pre></div>
+
+<p><span class="SimpleMath">\(\textbf{NOTE 3:}\)</span> No input checking is performed to verify if input <span class="SimpleMath">\(Asets\)</span> follows labeling convensions.</p>
+
+<p><a id="X798F99DF78E91283" name="X798F99DF78E91283"></a></p>
+
+<h5>3.1-5 GGnumberUB</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; GGnumberUB</code>( <var class="Arg">Asets</var>, <var class="Arg">nvars</var>, <var class="Arg">optargs</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: A rational number specifying the upper bound</p>
+
+<p>This function finds the least upper bound on the guessing number of a directed graph.</p>
+
+
+<ul>
+<li><p><span class="SimpleMath">\(G\)</span> - A list with 2 elements: 1) a list of vertices 2) a GAP record each vertex of the graph to a a list neighbors with edges incoming to it</p>
+
+</li>
+<li><p><span class="SimpleMath">\(optargs\)</span> is a list of optional arguments <span class="SimpleMath">\([nsrec,..]\)</span> where <span class="SimpleMath">\(nsrec\)</span>, when specified, is a GAP record that specifies</p>
+
+</li>
+</ul>
+<p>any non-Shannon type information inequalities to be included in the computation (see NOTE 2 for explanation of the format). Returns A rational number</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput"># define a directed graph (in this case, the cycle graph C5)</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">C5:=[ [ 1, 2, 3, 4, 5 ],\</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">  rec( 1 := [ 2, 5 ], 2 := [ 1, 3 ], 3 := [ 2, 4 ],\</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">      4 := [ 3, 5 ], 5 := [ 4, 1 ] ) ];;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">ub:=GGnumberUB(C5,[]);;</span>
+Original LP dimension...25
+LP dimension after considering symmetries...5
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">ub;</span>
+5/2
+</pre></div>
+
+<p><span class="SimpleMath">\(\textbf{NOTE 4:}\)</span> Certain naming convensions are followed while graph <span class="SimpleMath">\(G\)</span>. The vertices are labeled by the set <span class="SimpleMath">\(\{1,...,n\}\)</span> where <span class="SimpleMath">\(n\)</span> is the number of vertices of the graph. Hence, the keys of the record <span class="SimpleMath">\(G\)</span> are integers <span class="SimpleMath">\(\{1,...,n\}\)</span>. The value for a key <span class="SimpleMath">\(t\)</span> is a list <span class="SimpleMath">\([i,j,...]\)</span> where <span class="SimpleMath">\(i,j,...\)</span> are verties s.t. <span class="SimpleMath">\((i,t),(j,t),...\)</span> are the directed edges of the graph.</p>
+
+
+<div class="chlinkprevnextbot">&nbsp;<a href="chap0_mj.html">[Top of Book]</a>&nbsp;  <a href="chap0_mj.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap2_mj.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chapBib_mj.html">[Next Chapter]</a>&nbsp;  </div>
+
+
+<div class="chlinkbot"><span class="chlink1">Goto Chapter: </span><a href="chap0_mj.html">Top</a>  <a href="chap1_mj.html">1</a>  <a href="chap2_mj.html">2</a>  <a href="chap3_mj.html">3</a>  <a href="chapBib_mj.html">Bib</a>  <a href="chapInd_mj.html">Ind</a>  </div>
+
+<hr />
+<p class="foot">generated by <a href="http://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc">GAPDoc2HTML</a></p>
+</body>
+</html>

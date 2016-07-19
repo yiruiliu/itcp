@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<title>GAP (itcp) - Chapter 1: Introduction</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="GAPDoc2HTML" />
+<link rel="stylesheet" type="text/css" href="manual.css" />
+<script src="manual.js" type="text/javascript"></script>
+<script type="text/javascript">overwriteStyle();</script>
+</head>
+<body class="chap1"  onload="jscontent()">
+
+
+<div class="chlinktop"><span class="chlink1">Goto Chapter: </span><a href="chap0_mj.html">Top</a>  <a href="chap1_mj.html">1</a>  <a href="chap2_mj.html">2</a>  <a href="chap3_mj.html">3</a>  <a href="chapBib_mj.html">Bib</a>  <a href="chapInd_mj.html">Ind</a>  </div>
+
+<div class="chlinkprevnexttop">&nbsp;<a href="chap0_mj.html">[Top of Book]</a>&nbsp;  <a href="chap0_mj.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap0_mj.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap2_mj.html">[Next Chapter]</a>&nbsp;  </div>
+
+<p id="mathjaxlink" class="pcenter"><a href="chap1.html">[MathJax off]</a></p>
+<p><a id="X7DFB63A97E67C0A1" name="X7DFB63A97E67C0A1"></a></p>
+<div class="ChapSects"><a href="chap1_mj.html#X7DFB63A97E67C0A1">1 <span class="Heading">Introduction</span></a>
+</div>
+
+<h3>1 <span class="Heading">Introduction</span></h3>
+
+<p>ITCP stands for Information Theoretic Converse Prover. Several converse proofs, like those arising in multi-source network coding over directed acyclic hypergraphs, distributed storage, secret sharing, and graph guessing games etc., can be divided into two parts: 1) What to prove? 2) How to prove? ITCP is a software that allows one to use a computer to generate sensible statements of converse proofs i.e. part 1). The actual proof, i.e. part 2), can then be generated using Yeung's framework <a href="chapBib_mj.html#biByeunginfoframework">[Yeu97]</a> and linear programming duality (see eg. <a href="chapBib_mj.html#biBlihmsnc">[LWW15]</a>, <a href="chapBib_mj.html#biBTianJSAC433">[Tia14]</a>). Currently, it supports the following types of converse proofs:</p>
+
+
+<ul>
+<li><p>Polyhedral Converse (Network Coding): Given a multi-source network coding instance, determine the tightest set of inequalities amoungst source rate and edge capacity variables that are implied by Shannon-type and (if specified) given non-Shannnon-type information inequalities</p>
+
+</li>
+<li><p>Sum-rate Converse (Network Coding): Given a multi-source network coding instance, determine the least upper bound on the sum of source rates, implied by Shannon-type and (if specified) given non-Shannnon-type information inequalities, under specified edge capacities.</p>
+
+</li>
+<li><p>Worst-case information ratio lower bounds (Secret Sharing): Given an access structure, determine the greatest lower bound on the workst case information ratio implied by Shannon-type and (if specified) given non-Shannnon-type information inequalities</p>
+
+</li>
+<li><p>Guessing Number upper bounds (Guessing Games played on directed graphs): Given a directed graph, determine the least upper bound on its guessing number implied by Shannon-type and (if specified) given non-Shannnon-type information inequalities</p>
+
+</li>
+</ul>
+<p>The last three types of converse proofs can be performed by using linear programming techniques. This involves solving a linear program, whose optimum value gives us an upper (lower) bound. Then, one uses dual optimal vertex to provide a human readable proof that tells us how to combine various information inequalities to arrive at the aforementioned upper (lower) bound. For the first type of converse proof, however, one requires more sophisticated tools. For that purpose, ITCP uses polyhedral projection algorithm symchm, implemented in another GAP package that goes by The same name. In all of the problems mentioned above, one has to either project or solve linear programs over polytopes that have exponentially many dimensions compared to the problem size. A key feature of ITCP is automatic detection of problem symmetries and symmetry exploitation to reduce the ComplexityOfAlgebra of solving the above problems, so that one can approach ever larger problems from a computational perspective.</p>
+
+
+<div class="chlinkprevnextbot">&nbsp;<a href="chap0_mj.html">[Top of Book]</a>&nbsp;  <a href="chap0_mj.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap0_mj.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap2_mj.html">[Next Chapter]</a>&nbsp;  </div>
+
+
+<div class="chlinkbot"><span class="chlink1">Goto Chapter: </span><a href="chap0_mj.html">Top</a>  <a href="chap1_mj.html">1</a>  <a href="chap2_mj.html">2</a>  <a href="chap3_mj.html">3</a>  <a href="chapBib_mj.html">Bib</a>  <a href="chapInd_mj.html">Ind</a>  </div>
+
+<hr />
+<p class="foot">generated by <a href="http://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc">GAPDoc2HTML</a></p>
+</body>
+</html>

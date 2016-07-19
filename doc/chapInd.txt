@@ -1,0 +1,13 @@
+  
+  
+  [1XIndex[101X
+  
+  [2XGGnumberUB[102X  3.1-5
+  [5Xitcp[105X  .-1
+  [2XNCRateRegionOB[102X  3.1-2
+  [2XNCSumRateUB[102X  3.1-3
+  [2XNetSymGroup[102X  3.1-1
+  [2XSSWorstInfoRatioLB[102X  3.1-4
+  
+  
+  -------------------------------------------------------

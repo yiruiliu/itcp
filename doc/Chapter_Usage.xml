@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This is an automatically generated file. -->
+<Chapter Label="Chapter_Usage">
+<Heading>Usage</Heading>
+
+<Section Label="Chapter_Usage_Section_Available_functions">
+<Heading>Available functions</Heading>
+
+In this section we shall look at the functions provided by ITCP.
+<ManSection>
+  <Func Arg="ncinstance" Name="NetSymGroup" />
+ <Returns>A group
+</Returns>
+ <Description>
+This function finds the Network Symmetry Group of the input network instance
+bounding the rate region of an instance of mult-source network coding on directed acyclic hypergraphs.
+It accepts following arguments:
+<List>
+<Item>
+<Math>ncinstance</Math> is a list <Math>[cons,nsrc,nvars]</Math> containing 3 elements:
+<List>
+<Item>
+<Math>cons</Math> is a list of network coding constraints.
+</Item>
+<Item>
+<Math>nsrc</Math> is the number of sources.
+</Item>
+<Item>
+<Math>nvars</Math> is the number of random variables associated with the network.
+</Item>
+</List>
+</Item>
+</List>
+Returns a subgroup of symmetric group of <Math>nvars</Math> labels
+ </Description>
+</ManSection>
+
+
+<Example><![CDATA[
+gap> # Define a size 8 IDSC instance
+> idsc:=[ [ [ [ 1, 2, 3 ], [ 1, 2, 3, 4, 5, 6, 7, 8 ] ],\
+>       [ [ 4, 5 ], [ 1, 2, 4, 5 ] ], [ [ 5, 6 ], [ 1, 2, 5, 6 ] ],\
+>       [ [ 6, 7 ], [ 1, 2, 6, 7 ] ], [ [ 7, 8 ], [ 1, 2, 7, 8 ] ],\
+>       [ [ 4, 8 ], [ 1, 2, 4, 8 ] ], [ [ 4, 6 ], [ 3, 4, 6 ] ],\
+>       [ [ 5, 8 ], [ 3, 5, 8 ] ], [ [ 4, 7 ], [ 3, 4, 7 ] ],\
+>       [ [ 5, 7 ], [ 3, 5, 7 ] ], [ [ 6, 8 ], [ 3, 6, 8 ] ] ], 3, 8 ];
+gap> G:=NetSymGroup(idsc);
+Group([ (5,8)(6,7), (4,5)(6,8), (4,6)(7,8), (1,2) ])
+gap> Size(G);
+20
+]]></Example>
+
+
+<Math>\textbf{NOTE 1:}</Math> Certain naming convensions are followed while defining network coding instances. The source messages are labeled with
+<Math>[1...nsrc]</Math> while rest of the messages are labeled <Math>[nsrc...nvars]</Math>. Furthermore, the list <Math>cons</Math> includes
+all network constraints except source independence. This constraint is implied with the labeling i.e. ITAP
+enforces it by default for the messages labeled <Math>[1...nsrc]</Math>.
+<ManSection>
+  <Func Arg="ncinstance,usesym,optargs" Name="NCRateRegionOB" />
+ <Returns>A list
+</Returns>
+ <Description>
+This function finds the minimal (non-redundant) collection of inequalities
+bounding the rate region of an instance of mult-source network coding on directed acyclic hypergraphs.
+It accepts following arguments:
+<List>
+<Item>
+<Math>ncinstance</Math> is a list <Math>[cons,nsrc,nvars]</Math> containing 3 elements:
+<List>
+<Item>
+<Math>cons</Math> is a list of network coding constraints.
+</Item>
+<Item>
+<Math>nsrc</Math> is the number of sources.
+</Item>
+<Item>
+<Math>nvars</Math> is the number of random variables associated with the network.
+</Item>
+</List>
+</Item>
+<Item>
+<Math>usesym</Math> is a boolean indicating whether symmetry should be used in computation
+</Item>
+<Item>
+<Math>optargs</Math> is a list of optional arguments <Math>[nsrec,..]</Math> where <Math>nsrec</Math>, when specified, is a GAP record that specifies
+any non-Shannon type information inequalities to be included in the computation.
+</Item>
+</List>
+Returns a list <Math>[rr,rrstring]</Math> where <Math>rr</Math> is a list of normal vectors of the inequalities bounding the rate region,
+that are inequivalent under the Network Symmetry Group of <Math>ncinstance</Math> if <Math>usesym</Math> is true, otherwise <Math>rr</Math> contains
+all such normal vectors, under assumption of no symmetries.
+<Math>rrstring</Math> is a string that can be used to display inequalities associated with <Math>rr</Math> in an easier to read format.
+ </Description>
+</ManSection>
+
+
+<Example><![CDATA[
+gap> # define a network instance (in this case, Fano network)
+> F:=[ [ [ [ 1, 2 ], [ 1, 2, 4 ] ], [ [ 2, 3 ], [ 2, 3, 5 ] ],\
+>       [ [ 4, 5 ], [ 4, 5, 6 ] ], [ [ 3, 4 ], [ 3, 4, 7 ] ],\
+>       [ [ 1, 6 ], [ 3, 1, 6 ] ], [ [ 6, 7 ], [ 2, 6, 7 ] ],\
+>       [ [ 5, 7 ], [ 1, 5, 7 ] ] ], 3, 7 ];;
+gap> rlist:=NCRateRegionOB(F,true,[]);;
+gap> Display(rlist[2]);
+0 >= -w2
+0 >= -w1
+0 >= -w3
++R6 >= +w3
++R5 >= +w3
++R7 >= +w1
++R4 >= +w1
++R6 +R7 >= +w2 +w3
++R4 +R6 >= +w2 +w3
++R4 +R5 >= +w2 +w3
++R6 +R7 >= +w1 +w2
++R4 +R6 >= +w1 +w2
++R4 +R5 >= +w1 +w2
+gap> # Define a size 8 IDSC instance with NSG isomorphic to S2 X D5
+> idsc:=[ [ [ [ 1, 2, 3 ], [ 1, 2, 3, 4, 5, 6, 7, 8 ] ],\
+>       [ [ 4, 5 ], [ 1, 2, 4, 5 ] ], [ [ 5, 6 ], [ 1, 2, 5, 6 ] ],\
+>       [ [ 6, 7 ], [ 1, 2, 6, 7 ] ], [ [ 7, 8 ], [ 1, 2, 7, 8 ] ],\
+>       [ [ 4, 8 ], [ 1, 2, 4, 8 ] ], [ [ 4, 6 ], [ 3, 4, 6 ] ],\
+>       [ [ 5, 8 ], [ 3, 5, 8 ] ], [ [ 4, 7 ], [ 3, 4, 7 ] ],\
+>       [ [ 5, 7 ], [ 3, 5, 7 ] ], [ [ 6, 8 ], [ 3, 6, 8 ] ] ], 3, 8 ];
+gap> rlist1:=NCRateRegionOB2(idsc,true,[]);;
+gap> Display(rlist1[2]);
+0 >= -w2
+0 >= -w3
++R4 >= 0
++R4 +R6 >= +w3
++R4 +R5 >= +w1 +w2
++R4 +1/2R5 +1/2R8 >= +w1 +w2 +1/2w3
++1/2R4 +1/2R5 +1/2R6 +1/2R7 >= +w1 +w2 +1/2w3
++2/3R4 +2/3R5 +1/3R6 +1/3R8 >= +w1 +w2 +2/3w3
++2/3R4 +1/3R5 +1/3R6 +1/3R7 +1/3R8 >= +w1 +w2 +2/3w3
++1/2R4 +1/2R5 +1/2R6 +1/4R7 +1/4R8 >= +w1 +w2 +3/4w3
++R4 +1/2R5 +1/2R6 +1/2R7 >= +w1 +w2 +w3
++R4 +1/2R5 +1/2R6 +1/2R8 >= +w1 +w2 +w3
++R4 +1/3R5 +1/3R6 +1/3R7 +1/3R8 >= +w1 +w2 +w3
++2/3R4 +2/3R5 +1/3R6 +2/3R7 +1/3R8 >= +w1 +w2 +4/3w3
++R4 +1/2R5 +1/2R6 +R7 >= +w1 +w2 +3/2w3
++R4 +1/2R5 +1/2R6 +1/2R7 +1/2R8 >= +w1 +w2 +3/2w3
++2R4 +R6 +R7 >= +w1 +w2 +2w3
++R4 +R5 +R6 +R7 >= +w1 +w2 +2w3
+]]></Example>
+
+
+<Math>\textbf{NOTE 2:}</Math> Currently ITCP supports specifiation of non-Shannon ineqality of Zhang and Yeung <Cite Key="zyineq97"/> and 214 new
+non-Shannon inequalities found by Dougherty, Freiling and Zeger <Cite Key="dfznonshannon"/>. These inequalities can be applied to any collection
+of 4 subsets of a given set of random variables. The keys of the record <Math>nsrec</Math> can be integers <Math>1,...,215</Math> where index <Math>1</Math> corresponds to the ZY inequality
+while <Math>2,...,215</Math> correspond to the inequalities found by Dougherty, Freiling and Zeger. The value associated wth each key is a list of 4-subsets
+of subsets of <Math>nvars</Math> random variables associated with the network. Internally, several permuted forms of these inequalities are created, so as to not
+break the symmetries of the network coding instance, that are exploited during the computation.
+<ManSection>
+  <Func Arg="ncinstance,caps,optargs" Name="NCSumRateUB" />
+ <Returns>A rational number
+</Returns>
+ <Description>
+This function finds least upper bound on the sum of all source rates that is implied
+by the Shannon-type and (if specified) the non-Shannon-type inequalities.
+It accepts following arguments:
+<List>
+<Item>
+<Math>ncinstance</Math> is a list <Math>[cons,nsrc,nvars]</Math> containing 3 elements:
+<List>
+<Item>
+<Math>cons</Math> is a list of network coding constraints.
+</Item>
+<Item>
+<Math>nsrc</Math> is the number of sources.
+</Item>
+<Item>
+<Math>nvars</Math> is the number of random variables associated with the network.
+</Item>
+</List>
+</Item>
+<Item>
+<Math>caps</Math> is a list of <Math>nvars-nsrc</Math> non-negative integers, specifying the capacity of the edges
+</Item>
+<Item>
+<Math>optargs</Math> is a list of optional arguments <Math>[nsrec,..]</Math> where <Math>nsrec</Math>, when specified, is a GAP record that specifies
+any non-Shannon type information inequalities to be included in the computation (see NOTE 2 for explanation of the format).
+</Item>
+</List>
+Returns a rational number specifying the upper bound
+ </Description>
+</ManSection>
+
+
+<Example><![CDATA[
+gap> # define a network instance
+> N:= [[ [ [ 1 ], [ 1, 3 ] ], [ [ 1 ], [ 1, 4 ] ],[ [ 1, 2, 5 ],\
+>       [ 1, 2 ] ],[ [ 1, 2, 3 ], [ 2, 3 ] ],[ [ 2, 4 ], [ 1, 2, 4 ] ],\
+>       [ [ 2, 3, 4, 5 ], [ 3, 4, 5 ] ]] , 2, 5 ];;
+gap> ub:=NCSumRateUB(N,[1,1,1],[]);;
+Original LP dimension...28
+LP dimension after considering symmetries...22
+gap> ub;
+2
+]]></Example>
+
+
+<ManSection>
+  <Func Arg="Asets,nvars,optargs" Name="SSWorstInfoRatioLB" />
+ <Returns>A rational number specifying the lower bound
+</Returns>
+ <Description>
+This function finds the greatest lower bound on the worst case information ratio of a secret sharing instance.
+<List>
+<Item>
+<Math>Asets</Math> - A list of authorized sets each specified as a subset of <Math>[nvars-1]</Math>
+</Item>
+<Item>
+<Math>nvars</Math> - Number of participants (including one dealer)
+</Item>
+<Item>
+<Math>optargs</Math> is a list of optional arguments <Math>[nsrec,..]</Math> where <Math>nsrec</Math>, when specified, is a GAP record that specifies
+</Item>
+</List>
+any non-Shannon type information inequalities to be included in the computation (see NOTE 2 for explanation of the format).
+Returns a rational number
+ </Description>
+</ManSection>
+
+
+<Example><![CDATA[
+gap> # define an access structure
+> Asets:=[[2,3],[3,4],[4,5]];;
+gap> lb:=SSWorstInfoRatioLB(Asets,5,[]);;
+Original LP dimension...20
+LP dimension after considering symmetries...12
+gap> lb;
+3/2
+]]></Example>
+
+
+<Math>\textbf{NOTE 3:}</Math> No input checking is performed to verify if input <Math>Asets</Math> follows labeling convensions.
+<ManSection>
+  <Func Arg="Asets,nvars,optargs" Name="GGnumberUB" />
+ <Returns>A rational number specifying the upper bound
+</Returns>
+ <Description>
+This function finds the least upper bound on the guessing number of a directed graph.
+<List>
+<Item>
+<Math>G</Math> - A list with 2 elements: 1) a list of vertices 2) a GAP record each vertex of the graph to a a list neighbors with edges incoming to it
+</Item>
+<Item>
+<Math>optargs</Math> is a list of optional arguments <Math>[nsrec,..]</Math> where <Math>nsrec</Math>, when specified, is a GAP record that specifies
+</Item>
+</List>
+any non-Shannon type information inequalities to be included in the computation (see NOTE 2 for explanation of the format).
+Returns A rational number
+ </Description>
+</ManSection>
+
+
+<Example><![CDATA[
+gap> # define a directed graph (in this case, the cycle graph C5)
+> C5:=[ [ 1, 2, 3, 4, 5 ],\
+>   rec( 1 := [ 2, 5 ], 2 := [ 1, 3 ], 3 := [ 2, 4 ],\
+>       4 := [ 3, 5 ], 5 := [ 4, 1 ] ) ];;
+gap> ub:=GGnumberUB(C5,[]);;
+Original LP dimension...25
+LP dimension after considering symmetries...5
+gap> ub;
+5/2
+]]></Example>
+
+
+<Math>\textbf{NOTE 4:}</Math> Certain naming convensions are followed while graph <Math>G</Math>. The vertices are labeled by the set <Math>\{1,...,n\}</Math> where
+<Math>n</Math> is the number of vertices of the graph. Hence, the keys of the record <Math>G</Math> are integers <Math>\{1,...,n\}</Math>. The value for a key <Math>t</Math> is a list
+<Math>[i,j,...]</Math> where <Math>i,j,...</Math> are verties s.t. <Math>(i,t),(j,t),...</Math> are the directed edges of the graph.
+</Section>
+
+
+</Chapter>
+

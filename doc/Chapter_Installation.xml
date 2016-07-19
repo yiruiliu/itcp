@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This is an automatically generated file. -->
+<Chapter Label="Chapter_Installation">
+<Heading>Installation</Heading>
+
+ITCP requires GAP package symchm <Cite Key="jayantsymchm"/> for symmetry exploiting polyhedral projection, along with
+package <Math>\texttt{qsopt}\_\texttt{ex-interface}</Math> for solving linear programs exactly using rational arithmetic.
+You can find information about how to install them in their respective user manuals.
+To get the newest version of ITCP, download the .zip archive from <URL>https://github.com/jayant91089/itcp</URL>
+and unpack it using
+<Display>\texttt{unzip itcp-x.zip}</Display>
+Do this preferably inside the <Math>pkg</Math> subdirectory
+of your GAP 4 installation. It creates a subdirectory called <Math>itcp</Math>.
+This completes the installation of the package. If you do not know the whereabouts of the <Math>pkg</Math> subdirectory, invoke the following in GAP:
+<Listing Type="Code"><![CDATA[
+GAPInfo.("RootPaths");
+]]></Listing>
+
+Look for pkg directory inside any of the paths returned.
+One can then start using ITCP by invoking
+<Display>gap></Display>
+<Listing Type="Code"><![CDATA[
+LoadPackage( "itcp");
+]]></Listing>
+
+from within GAP. This would automatically load the dependencies <Math>symchm</Math> and <Math>\texttt{qsopt}\_\texttt{ex-interface}</Math>, so you don't have to load them seperately.
+</Chapter>
+

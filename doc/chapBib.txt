@@ -1,0 +1,21 @@
+  
+  
+  [1XReferences[101X
+  
+  [[20XApt16[120X] [16XApte, J.[116X, [17Xsymchm - A GAP4 package for symmetry-exploiting polyhedral projection[117X (2016), ((http://www.ece.drexel.edu/walsh/aspitrg/software.html)).
+  
+  [[20XDFZ11[120X] [16XDougherty, R., Freiling, C. and Zeger, K.[116X, [17XNon-Shannon Information Inequalities in Four Random Variables[117X, [18XCoRR[118X, [19Xabs/1104.3602[119X (2011).
+  
+  [[20XLWW15[120X] [16XLi, C., Weber, S. and Walsh, J. M.[116X, [17XOn Multi-source Networks: Enumeration, Rate Region Computation, and Hierarchy[117X, [18XCoRR[118X, [19Xabs/1507.05728[119X (2015).
+  
+  [[20XTia14[120X] [16XTian, C.[116X, [17XCharacterizing the Rate Region of the (4, 3, 3) Exact-Repair Regenerating Codes[117X, [18X{IEEE} Journal on Selected Areas in Communications[118X, [19X32[119X, 5
+  (2014), 967--975.
+  
+  [[20XYeu97[120X] [16XYeung, R. W.[116X, [17XA framework for linear information inequalities[117X, [18XIEEE Transactions on Information Theory[118X, [19X43[119X, 6 (1997), 1924-1934.
+  
+  [[20XZY97[120X]  [16XZhang,  Z.  and  Yeung,  R.  W.[116X,  [17XA  non-Shannon-type conditional of information quantities[117X, [18XInformation Theory, IEEE Transactions on[118X, [19X43[119X, 6 (1997),
+  1982-1986.
+  
+  
+  
+  [32X

@@ -1,0 +1,11 @@
+\contentsline {chapter}{\numberline {1}\leavevmode {\color {Chapter }Introduction}}{3}{chapter.1}
+\contentsline {chapter}{\numberline {2}\leavevmode {\color {Chapter }Installation}}{4}{chapter.2}
+\contentsline {chapter}{\numberline {3}\leavevmode {\color {Chapter }Usage}}{5}{chapter.3}
+\contentsline {section}{\numberline {3.1}\leavevmode {\color {Chapter }Available functions}}{5}{section.3.1}
+\contentsline {subsection}{\numberline {3.1.1}\leavevmode {\color {Chapter }NetSymGroup}}{5}{subsection.3.1.1}
+\contentsline {subsection}{\numberline {3.1.2}\leavevmode {\color {Chapter }NCRateRegionOB}}{6}{subsection.3.1.2}
+\contentsline {subsection}{\numberline {3.1.3}\leavevmode {\color {Chapter }NCSumRateUB}}{7}{subsection.3.1.3}
+\contentsline {subsection}{\numberline {3.1.4}\leavevmode {\color {Chapter }SSWorstInfoRatioLB}}{8}{subsection.3.1.4}
+\contentsline {subsection}{\numberline {3.1.5}\leavevmode {\color {Chapter }GGnumberUB}}{8}{subsection.3.1.5}
+\contentsline {chapter}{References}{10}{chapter*.2}
+\contentsline {chapter}{Index}{11}{section*.3}

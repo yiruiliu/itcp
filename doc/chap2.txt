@@ -1,0 +1,38 @@
+  
+  [1X2 [33X[0;0YInstallation[133X[101X
+  
+  [33X[0;0YITCP  requires GAP package symchm [Apt16] for symmetry exploiting polyhedral
+  projection,  along  with  package  [23X\texttt{qsopt}\_\texttt{ex-interface}[123X for
+  solving  linear  programs  exactly  using  rational arithmetic. You can find
+  information  about  how to install them in their respective user manuals. To
+  get   the   newest   version   of  ITCP,  download  the  .zip  archive  from
+  [7Xhttps://github.com/jayant91089/itcp[107X and unpack it using[133X
+  
+  
+        [33X[1;6Y[24X[33X[0;0Y\texttt{unzip itcp-x.zip}[133X [124X[133X
+  
+  
+  [33X[0;0YDo  this  preferably inside the [23Xpkg[123X subdirectory of your GAP 4 installation.
+  It  creates  a  subdirectory called [23Xitcp[123X. This completes the installation of
+  the  package.  If  you  do not know the whereabouts of the [23Xpkg[123X subdirectory,
+  invoke the following in GAP:[133X
+  
+  [4X[32X  Code  [32X[104X
+    [4XGAPInfo.("RootPaths");[104X
+  [4X[32X[104X
+  
+  [33X[0;0YLook  for pkg directory inside any of the paths returned. One can then start
+  using ITCP by invoking[133X
+  
+  
+        [33X[1;6Y[24X[33X[0;0Ygap>[133X [124X[133X
+  
+  
+  [4X[32X  Code  [32X[104X
+    [4XLoadPackage( "itcp");[104X
+  [4X[32X[104X
+  
+  [33X[0;0Yfrom  within  GAP. This would automatically load the dependencies [23Xsymchm[123X and
+  [23X\texttt{qsopt}\_\texttt{ex-interface}[123X,  so  you  don't  have  to  load  them
+  seperately.[133X
+  

@@ -1,0 +1,39 @@
+\begin{thebibliography}{LWW15}
+
+\bibitem[Apt16]{jayantsymchm}
+Jayant Apte.
+\newblock symchm - {A GAP4 package for symmetry-exploiting polyhedral
+  projection}, 2016.
+\newblock http://www.ece.drexel.edu/walsh/aspitrg/software.html.
+
+\bibitem[DFZ11]{dfznonshannon}
+R.~Dougherty, C.~Freiling, and K.~Zeger.
+\newblock Non-shannon information inequalities in four random variables.
+\newblock {\em CoRR}, abs/1104.3602, 2011.
+
+\bibitem[LWW15]{lihmsnc}
+Congduan Li, Steven Weber, and John~MacLaren Walsh.
+\newblock On multi-source networks: Enumeration, rate region computation, and
+  hierarchy.
+\newblock {\em CoRR}, abs/1507.05728, 2015.
+
+\bibitem[Tia14]{TianJSAC433}
+Chao Tian.
+\newblock Characterizing the rate region of the (4, 3, 3) exact-repair
+  regenerating codes.
+\newblock {\em {IEEE} Journal on Selected Areas in Communications},
+  32(5):967--975, 2014.
+
+\bibitem[Yeu97]{yeunginfoframework}
+R.~W. Yeung.
+\newblock A framework for linear information inequalities.
+\newblock {\em IEEE Transactions on Information Theory}, 43(6):1924--1934, Nov
+  1997.
+
+\bibitem[ZY97]{zyineq97}
+Zhen Zhang and R.W. Yeung.
+\newblock A non-shannon-type conditional of information quantities.
+\newblock {\em Information Theory, IEEE Transactions on}, 43(6):1982--1986, Nov
+  1997.
+
+\end{thebibliography}

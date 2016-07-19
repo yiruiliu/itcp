@@ -1,0 +1,38 @@
+    README file for the `itcp' GAP4 package
+
+This Package provides a routines to construct vector linear
+network codes and representation of integer linear polymatroids.
+
+To get the newest version of this GAP 4 package download one of the
+archive files
+    itcp-x.x.tar.gz
+    itcp-x.x.zoo
+    itcp-x.x.tar.bz2
+    itcp-x.x.zip
+and unpack it using
+    gunzip itcp-x.x.tar.gz; tar xvf itcp-x.x.tar
+respectively
+    unzoo -x itcp-x.x.zoo
+and so on.
+
+(Note that if you use a browser like `netscape' for downloading the
+archive file the `gunzip' step above may already be done by the browser,
+although the name of your file may still have the misleading `.gz'
+extension.)
+
+Do this preferably (but not necessarily) inside the `pkg' subdirectory
+of your GAP 4 installation. It creates a subdirectory called `itcp'.
+
+This completes the installation of the package.
+
+Testing the package is possible by invoking
+
+ReadPackage( "itcp", "maketest.g" );
+
+from within GAP.
+
+E-mail me if there are any questions, remarks, suggestions. Also, I
+would like to hear about applications of this package.
+
+
+Jayant Apte, e-mail: jayant91089@gmail.com
