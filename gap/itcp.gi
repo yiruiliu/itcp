@@ -804,6 +804,60 @@ NCpolytope_fwrite:=function(ncinstance,fname)
   writeinefile(fname,linrows,mtx);
 end;
 
+NCRateRegionOB2:=function(ncinstance,usesym,optargs)
+  local rlist,A,b,linrows,G,rlist1,ineq,ineqorb,row,rrA,rrb,onemap,nslist,idx,nsrec,los,lolos,Oi,O,trans_ineq;
+  rlist:=NCShannonBounded(ncinstance);
+  A:=rlist[1];
+  b:=rlist[2];
+  linrows:=rlist[3];
+  #Comnpute symmetry group of ncinstance
+  if usesym=false then
+    G:=Group([()]);
+  else
+    G:=NetSymGroup(ncinstance);
+  fi;
+  #if non-shannons are specified for some subsets, include all permutations of them
+  if Size(optargs)>0 then
+    nslist:=[];
+    nsrec:=optargs[1];
+    for idx in RecNamesInt(nsrec) do
+      lolos:=nsrec.(idx);
+      for los in lolos do
+        if idx = 1 then
+          ineq:= ZYNonShannon(los,ncinstance[3]);
+          ineqorb:=Orbit(G,ineq,OnEntropySpace);
+          Append(nslist,ineqorb);
+        else
+          ineq:= DFZNonShannon(idx-1,los,ncinstance[3]);
+          ineqorb:=Orbit(G,ineq,OnEntropySpace);
+          Append(nslist,ineqorb);
+        fi;
+      od;
+    od;
+    Append(A,nslist);
+    Append(b,ZeroMutable([1..Size(nslist)]));
+  fi;
+  rlist1:=symCHM(A,b,linrows,ncinstance[3],G,OnProjPts,OnProjIneq,false);
+  Display(Concatenation("stats:  No. of LPs solved = ",String(rlist1[3][1]),", \n\t No. of facets = ",String(Size(rlist1[2])),", \n\tDD stepsizes beyond initial hull = ",String(rlist1[3][2]) ));
+  rrA:=[];
+  rrb:=[];
+  for row in rlist1[2] do
+    # find the bounding sum-to-one inequality
+    onemap := function ( x ) return 1; end;
+    if not row=List([1..Size(row)],onemap) then
+      Append(rrA,[row{[1..Size(row)-1]}]);
+      Append(rrb,[row[Size(row)]]);
+    fi;
+  od;
+  # inequality transversal
+  trans_ineq:= [];
+  Oi:=OrbitsDomain(G,rrA,OnProjIneq);
+  for O in Oi do
+    Append(trans_ineq,[O[1]]);
+  od;
+  return [trans_ineq, RRparse(ncinstance,trans_ineq)];#[rlist1[1],rlist1[2]];
+end;
+
 InstallGlobalFunction(NCRateRegionOB,
 function(ncinstance,usesym,optargs)
   local rlist,A,b,linrows,G,rlist1,ineq,ineqorb,row,rrA,rrb,onemap,nslist,idx,nsrec,los,lolos,Oi,O,trans_ineq;
@@ -838,7 +892,7 @@ function(ncinstance,usesym,optargs)
     Append(A,nslist);
     Append(b,ZeroMutable([1..Size(nslist)]));
   fi;
-  rlist1:=symCHM(A,b,linrows,ncinstance[3],G,OnProjPts,OnProjIneq);
+  rlist1:=symCHM(A,b,linrows,ncinstance[3],G,OnProjPts,OnProjIneq,false);
   Display(Concatenation("stats:  No. of LPs solved = ",String(rlist1[3][1]),", \n\t No. of facets = ",String(Size(rlist1[2])),", \n\tDD stepsizes beyond initial hull = ",String(rlist1[3][2]) ));
   rrA:=[];
   rrb:=[];
