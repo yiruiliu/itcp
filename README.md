@@ -52,9 +52,9 @@ tar -xf Singular-4-0-3-x86_64-Linux.tar.gz
 tar -xf Singular-4-0-3-share.tar.gz
 cd ../
 ```
-#### Copy paste the following line (without quotes) in the file "$HOME/.bashrc".
+#### Copy paste the following line in the file "$HOME/.bashrc", after substituting path-to-singular-bin with the absolute path to the bin directory inside the singular_install directory we just created.
 ```{r, engine='bash', count_lines}
-export PATH=$PWD/bin/:$PATH
+export PATH=path-to-singular-bin/:$PATH
 ```
 #### Create the .bashrc file if it doesn't exist already. This gives you the permanent ability to type "Singular" in the terminal to invoke the Singular's terminal based interface. While we wont be using this interface, it is convenient at a later time (Step 5) for setting the "sing_exec" variable in the GAP-Singular interface, that directs ITAP to the Singular executable.
 
