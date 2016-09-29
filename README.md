@@ -23,9 +23,9 @@ cd gmp-6.1.0
 ./configure --prefix=$PWD/../gmp_install
 ```
 
-#### substitute X below if you know the number of physical threads on your computer otherwise, just omit the -j switch
+#### Use the -j switch with ```make``` below, and in the rest of this howto if you are certain you know what you are doing, otherwise don't bother about it.  
 ```{r, engine='bash', count_lines}
-make -jX
+make
 make install
 make check
 cd ../
@@ -36,6 +36,7 @@ rm -rf gmp-6.1.0
 ## Step 2: Install GAP (common)
 ```{r, engine='bash', count_lines}
 wget http://www.gap-system.org/pub/gap/gap48/tar.gz/gap4r8p4_2016_06_04-12_41.tar.gz
+tar -xf gap*.tar.gz
 cd gap4r8
 ./configure  --with-gmp=$PWD/../gmp_install
 make
@@ -75,7 +76,7 @@ mv -r itap-master itap
 ```
 #### Finally,
 ```{r, engine='bash', count_lines}
-cd ../
+cd ../../
 ```
 ## Step 5: End of ITAP installation (ITAP specific)
 #### At this point you are ready to use ITAP. To start using ITAP, open a new terminal and navigate to the 'catpit' directory created in Step 0. Then type:
@@ -107,7 +108,7 @@ mkdir qsopt_install bzip2_install zlib_install
 ```{r, engine='bash', count_lines}
   $ cd zlib-1.2.8
   $ ./configure --prefix=$PWD/../zlib_install
-  $ make -j12
+  $ make
   $ make install
   $ cd ../
 ```
@@ -141,7 +142,7 @@ export C_INCLUDE_PATH=absolute-path-to-catpit/include-directory
 cd qsopt-ex-2.5.10.3
 mkdir build && cd build
 ../configure --prefix=$PWD/../../qsopt_install LDFLAGS="-L$PWD/../../gmp_install/lib -L$PWD/../../zlib_install/lib -L$PWD/../../bzip2_install/lib"
-make -jX
+make
 make install
 cd ../../
 ```
