@@ -52,7 +52,7 @@ tar -xf Singular-4-0-3-x86_64-Linux.tar.gz
 tar -xf Singular-4-0-3-share.tar.gz
 cd ../
 ```
-#### Copy paste the following line in the file "$HOME/.bashrc", after substituting path-to-singular-bin with the absolute path to the bin directory inside the singular_install directory we just created.
+#### Copy paste the following line in the file "$HOME/.bashrc", after substituting path-to-singular-bin with the absolute path to .
 ```{r, engine='bash', count_lines}
 export PATH=path-to-singular-bin/:$PATH
 ```
@@ -177,6 +177,11 @@ cd ../../
 #### Open the ```gap/qsinterface.gi``` file inside qsopt_ex-interface directory and define a variable ```qs_exec``` to store the absolute path to the ```qsi``` executable created in the previous step. e.g.
 ```{r, engine='bash', count_lines}
 qs_exec:="/home/jayant/catpit/gap4r8/pkg/qsopt_ex-interface/qsi";
+```
+#### Paste the following line in the ```$HOME/.bashrc``` (see step 3 for more details about this file), after substituting
+```path-to-catpit``` with an appropriate path.
+```{r, engine='bash', count_lines}
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:path-to-catpit/lib
 ```
 
 ## Step 14: Get symchm
