@@ -398,6 +398,112 @@ local ShOB,i,linrows,con,conlin,j,conineq;
   return [ShOB[1],ShOB[2],linrows];
 end;
 
+ProofParseShannon:=function(ncinstance,lvec)
+  local ShOB,i,linrows,con,conlin,j,conineq,displaystr,nset_i,rowcnt,K,Klist,nset_ij,pairs,p;
+    displaystr:="";
+    ShOB:=GenShannonUnBounded(ncinstance[3]);
+    for i in [1..ncinstance[3]] do
+      if lvec[i]>0 then
+        nset_i:=[1..ncinstance[3]];
+        SubtractSet(nset_i,[i]);
+        displaystr:=Concatenation(displaystr," ",String(lvec[i])," ","H(",String(i),"|",String(nset_i),")>=0 \n");
+      fi;
+    od;
+    rowcnt:=ncinstance[3]+1;
+    # second, add I(X_i,X_j|X_K) >=0
+    pairs:=Combinations([1..ncinstance[3]],2);
+    for p in pairs do
+      nset_ij:=[1..ncinstance[3]];
+      SubtractSet(nset_ij,p);
+      Klist:=Combinations(nset_ij);
+      for K in Klist do
+        if lvec[rowcnt]>0 then
+          if Size(K)>0 then
+            displaystr:=Concatenation(displaystr," ",String(lvec[rowcnt])," ","I( ",String(p[1])," ; ",String(p[2]),"| ",String(K),")>=0 \n" );
+          else
+            displaystr:=Concatenation(displaystr," ",String(lvec[rowcnt])," ","I( ",String(p[1])," ; ",String(p[2]), ")" ,">=0 \n" );
+          fi;
+        fi;
+        rowcnt:=rowcnt+1;
+      od;
+    od;
+    Display(displaystr);
+    linrows:=[];
+    # node constraints
+    for con in ncinstance[1] do
+      if lvec[rowcnt]>0 then
+        displaystr:=Concatenation(displaystr,String(lvec[rowcnt]), String(" -"),"H(",String(con[1]),") + H(",String(con[2]),")>=0 \n" );
+      fi;
+      rowcnt:=rowcnt+1;
+    od;
+    # source independence
+    if lvec[rowcnt]>0 then
+      displaystr:=Concatenation(displaystr,String(lvec[rowcnt]), " - sum_[",String(ncinstance[2]),"] H(i) + H(",String([1..ncinstance[2]]),")>=0 \n" );
+    fi;
+    rowcnt:=rowcnt+1;
+    # source and edge rates
+    for j in [1..ncinstance[2]] do # source rate ineq
+      if lvec[rowcnt]>0 then
+        displaystr:=Concatenation(displaystr,String(lvec[rowcnt])," - w_",String(j),"+ H(",String(j),")>=0 \n");
+      fi;
+      rowcnt:=rowcnt+1;
+      if lvec[rowcnt]>0 then
+        displaystr:=Concatenation(displaystr,String(lvec[rowcnt])," w_",String(j),">=0 \n");
+      fi;
+      rowcnt:=rowcnt+1;
+    od;
+    for j in [ncinstance[2]+1..ncinstance[3]] do # edge rate ineq
+      if lvec[rowcnt]>0 then
+        displaystr:=Concatenation(displaystr,String(lvec[rowcnt])," R_",String(j),"- H(",String(j),")>=0 \n");
+      fi;
+      rowcnt:=rowcnt+1;
+      if lvec[rowcnt]>0 then
+        displaystr:=Concatenation(displaystr,String(lvec[rowcnt])," R_",String(j),">=0");
+      fi;
+      rowcnt:=rowcnt+1;
+    od;
+
+    for con in ncinstance[1] do
+      if lvec[rowcnt]>0 then
+        displaystr:=Concatenation(displaystr,String(lvec[rowcnt])," H(",String(con[1]),") - H(",String(con[2]),")>=0 \n" );
+      fi;
+      rowcnt:=rowcnt+1;
+    od;
+    # source independence
+    if lvec[rowcnt]>0 then
+      displaystr:=Concatenation(displaystr,String(lvec[rowcnt]), " sum_[",String(ncinstance[2]),"] H(i) - H(",String([1..ncinstance[2]]),")>=0" );
+    fi;
+    rowcnt:=rowcnt+1;
+    return displaystr;
+end;
+
+DualProofShannonL1:=function(ncinstance,ineq)
+  # Construct Shannon cone, with network constraints
+  local rlist,A,i,At,obj,b,onemap,rlist1,s,rlist2,linrows,nnineq,linrows1;
+  rlist:=NCShannonBounded(ncinstance);
+  # Get rid of the sum to one ineq
+  A:=-rlist[1]{[1..Size(rlist[1])-1]};
+  # Convert equalities to inequalities
+  linrows:=rlist[3];
+  Append(A,-A{linrows});
+  At:=MutableMatrix(TransposedMat(A));
+  linrows1:=[1..Size(At)];
+  for i in [1..Size(At[1])] do
+    nnineq:=ZeroMutable([1..Size(At[1])]);
+    nnineq[i]:=-1;
+    Append(At,[nnineq]);
+  od;
+  onemap := function ( x ) return 1; end;
+  obj:=-List([1..Size(At[1])],onemap);
+  b:=Concatenation(-ineq,ZeroMutable([1..Size(At)-Size(ineq)]));
+  rlist1:=LoadQSLP(obj,At,b,linrows1,qs_exec);
+  s:=rlist1[1];
+  SolveQSLP(s,[]);
+  rlist2:=GetQSLPsol_primal(s);; # get primal solution
+  Display(rlist2[5]);
+  CloseStream(s);
+end;
+
 NCShannonCaps:=function(ncinstance,caps)
 # Shannon + network constraints + capacity caps on edge rates
 local ShOB,i,linrows,con,conlin,j,conineq;
@@ -709,6 +815,8 @@ local NSG,pset,pset_orbs,cons,conlin,orb,j;
   od;
   return cons;
 end;
+
+
 
 SSSymmetryCons:=function(Asets,nvars)
   local SSG,pset,pset_orbs,cons,conlin,orb,j;
@@ -1230,10 +1338,11 @@ H2:=Group([ (2,3),
  (1,3)]);
 
 
-
-perm2bj:=function(g,maxi)
-   return List([1..maxi],x->x^g);
-end;
+if not IsBound(perm2bj) then
+  perm2bj:=function(g,maxi)
+     return List([1..maxi],x->x^g);
+  end;
+fi;
 
 rayperm2mat:=function(g,raylist)
   local bj,raylistT,mat,i,j,vec,row;
@@ -1251,6 +1360,24 @@ rayperm2mat:=function(g,raylist)
     Append(mat,[row]);
   od;
   return mat;
+end;
+
+ExpandLinSym:=function(M,n,nx)
+  # expand  n-variable linear symmetry to form nx-variable linear symmetry
+  # M is 2^n-1 X 2^n-1 matrix
+  # returns 2^nx-1 X 2^nx-1 matrix
+  local Mx, i,row;
+  Mx:=[];
+  for i in [1..2^nx-1] do
+    if i > 2^n-1 then
+      row:=ZeroMutable([1..2^nx-1]);
+      row[i]:=1;
+    else
+      row:= Concatenation(M[i],ZeroMutable([1..2^n-1]));
+    fi;
+    Append(Mx,[row]);
+  od;
+  return Mx;
 end;
 
 
