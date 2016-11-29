@@ -44,25 +44,25 @@ make
 ## Step 3: Install Singular (ITAP specific)
 ### This step follows instructions at https://www.singular.uni-kl.de/index.php/singular-download/109.html, to obtain pre-compiled binaries of Singular for linux systems.
 
-#### In the first line below, replace x86_64-Linux appropriately based on your computer architecture
+#### In the first line below, replace x86_64-Linux appropriately based on your computer architecture (make sure you have the correct name of the latest archive by navigating to [http://www.mathematik.uni-kl.de/ftp/pub/Math/Singular/UNIX/](http://www.mathematik.uni-kl.de/ftp/pub/Math/Singular/UNIX/) in your web browser, where the latest archives are hosted). 
 ```{r, engine='bash', count_lines}
 mkdir singular_install; cd singular_install
-wget http://www.mathematik.uni-kl.de/ftp/pub/Math/Singular/UNIX/Singular-4-0-3-x86_64-Linux.tar.gz
-wget http://www.mathematik.uni-kl.de/ftp/pub/Math/Singular/UNIX/Singular-4-0-3-share.tar.gz
-tar -xf Singular-4-0-3-x86_64-Linux.tar.gz
-tar -xf Singular-4-0-3-share.tar.gz
+wget http://www.mathematik.uni-kl.de/ftp/pub/Math/Singular/UNIX/Singular-4.1.0-x86_64-Linux.tar.gz
+tar -xf Singular-4.1.0-x86_64-Linux.tar.gz
 cd ../
 ```
-#### Copy paste the following line in the file "$HOME/.bashrc", after substituting path-to-singular-bin with the absolute path to .
+#### Copy paste the following line in the file "$HOME/.bashrc", after substituting path-to-singular-bin with the absolute path to the ```bin``` directory created inside ```singular_install``` directory, as a result of the most recent ```tar``` command.
 ```{r, engine='bash', count_lines}
 export PATH=path-to-singular-bin/:$PATH
 ```
 #### Create the .bashrc file if it doesn't exist already. This gives you the permanent ability to type "Singular" in the terminal to invoke the Singular's terminal based interface. While we wont be using this interface, it is convenient at a later time (Step 5) for setting the "sing_exec" variable in the GAP-Singular interface, that directs ITAP to the Singular executable.
 
+Note:  The functionality provided by ~/.bashrc is itself dependent on the ~/.profile file, so in case you run into any errors later, make sure these two files are set up correctly. You may want to consult [this stackoverflow answer](http://askubuntu.com/questions/161249/bashrc-not-executed-when-opening-new-terminal)  if you are on Ubuntu.
+
 ## Step 4: Download and Install ITAP (ITAP specific)
 #### Go to the gap pkg directory
 ```{r, engine='bash', count_lines}
-cd gap4r8/pkg
+cd pkg
 ```
 #### If you have git installed:
 ```{r, engine='bash', count_lines}
@@ -106,11 +106,11 @@ mkdir qsopt_install bzip2_install zlib_install
 
 ## Step 8: zlib installation (ITCP specific)
 ```{r, engine='bash', count_lines}
-  $ cd zlib-1.2.8
-  $ ./configure --prefix=$PWD/../zlib_install
-  $ make
-  $ make install
-  $ cd ../
+  cd zlib-1.2.8
+  ./configure --prefix=$PWD/../zlib_install
+  make
+  make install
+  cd ../
 ```
 ## Step 9: bzip2 installation (ITCP specific)
 ```{r, engine='bash', count_lines}
@@ -163,7 +163,7 @@ git clone https://github.com/jayant91089/qsopt_ex-interface.git
 #### Else
 ```{r, engine='bash', count_lines}
 wget https://github.com/jayant91089/qsopt_ex-interface/archive/master.zip
-unzip qsopt_ex-interface-master.zip
+unzip master.zip
 mv -r qsopt_ex-interface-master qsopt_ex-interface
 ```
 #### Finally,
