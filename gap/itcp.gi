@@ -398,6 +398,67 @@ local ShOB,i,linrows,con,conlin,j,conineq;
   return [ShOB[1],ShOB[2],linrows];
 end;
 
+NCShannonBounded_allsum:=function(ncinstance)
+local ShOB,i,linrows,con,conlin,j,conineq;
+  ShOB:=GenShannonUnBounded(ncinstance[3]);
+  i:=Size(ShOB[1])+1;
+  linrows:=[];
+  # node constraints
+  for con in ncinstance[1] do
+    conlin:=ZeroMutable([1..2^ncinstance[3]-1]);
+    conlin[set2int(con[1])]:=1;
+    conlin[set2int(con[2])]:=-1;
+    Append(ShOB[1],[conlin]);
+    Append(ShOB[2],[0]);
+    Append(linrows,[i]);
+    i:=i+1;
+  od;
+  # source independence
+  conlin:= ZeroMutable([1..2^ncinstance[3]-1]);
+  for j in [1..ncinstance[2]] do
+  conlin[set2int([j])]:=1;
+  od;
+  conlin[set2int([1..ncinstance[2]])]:=-1;
+  Append(ShOB[1],[conlin]);
+  Append(ShOB[2],[0]);
+  Append(linrows,[i]);
+  i:=i+1;
+  # source and edge rates
+  for j in [1..Size(ShOB[1])] do
+  ShOB[1][j]:=Concatenation(ZeroMutable([1..ncinstance[3]]),ShOB[1][j]);
+  od;
+  for j in [1..ncinstance[2]] do # source rate ineq
+    conineq:=ZeroMutable([1..2^ncinstance[3]-1+ncinstance[3]]);
+    conineq[j]:=1;
+    conineq[ncinstance[3]+set2int([j])]:=-1;
+    Append(ShOB[1],[conineq]);
+    Append(ShOB[2],[0]);
+    conineq:=ZeroMutable([1..2^ncinstance[3]-1+ncinstance[3]]);
+    conineq[j]:=-1; # non-negative
+    Append(ShOB[1],[conineq]);
+    Append(ShOB[2],[0]);
+  od;
+  for j in [ncinstance[2]+1..ncinstance[3]] do # edge rate ineq
+    conineq:=ZeroMutable([1..2^ncinstance[3]-1+ncinstance[3]]);
+    conineq[j]:=-1;
+    conineq[ncinstance[3]+set2int([j])]:=1;
+    Append(ShOB[1],[conineq]);
+    Append(ShOB[2],[0]);
+    conineq:=ZeroMutable([1..2^ncinstance[3]-1+ncinstance[3]]);
+    conineq[j]:=-1; # non-negative
+    Append(ShOB[1],[conineq]);
+    Append(ShOB[2],[0]);
+  od;
+  # sum<=1 for rates
+  conineq:=ZeroMutable([1..2^ncinstance[3]-1+ncinstance[3]]);
+  for j in [1..ncinstance[3]] do
+    conineq[j]:=1;
+  od;
+  Append(ShOB[1],[conineq]);
+  Append(ShOB[2],[100]);
+  return [ShOB[1],ShOB[2],linrows];
+end;
+
 ProofParseShannon:=function(ncinstance,lvec)
   local ShOB,i,linrows,con,conlin,j,conineq,displaystr,nset_i,rowcnt,K,Klist,nset_ij,pairs,p;
     displaystr:="";
@@ -816,6 +877,32 @@ local NSG,pset,pset_orbs,cons,conlin,orb,j;
   return cons;
 end;
 
+NCSymmetryCons_proj:=function(ncinstance)#,optargs)
+local NSG,pset,pset_orbs,cons,conlin,orb,j;
+  # if Size(optargs) =1 then
+  #   NSG:=optargs[1];
+  # else
+    NSG:=NetSymGroup(ncinstance);
+  # fi;
+  # construct orbitwise inequalities
+  pset:=Combinations([1..ncinstance[3]]);
+  pset:=pset{[2..Size(pset)]};
+  pset_orbs:=OrbitsDomain(NSG,pset,OnSets);
+  cons:=[];
+  Display(pset_orbs);
+  #Display(Size(pset_orbs));
+  for orb in pset_orbs do
+    if Size(orb[1])<ncinstance[3] and Size(orb)>1 then
+      for j in [1..Size(orb)-1] do
+        conlin:=ZeroMutable([1..2^ncinstance[3]-1+ncinstance[3]]);
+        conlin[set2int(orb[j])+ncinstance[3]]:=1;
+        conlin[set2int(orb[j+1])+ncinstance[3]]:=-1;
+        Append(cons,[conlin]);
+      od;
+    fi;
+  od;
+  return cons;
+end;
 
 
 SSSymmetryCons:=function(Asets,nvars)
@@ -998,6 +1085,78 @@ NCRateRegionOB2:=function(ncinstance,usesym,optargs)
     Append(A,nslist);
     Append(b,ZeroMutable([1..Size(nslist)]));
   fi;
+  rlist1:=symCHM(A,b,linrows,ncinstance[3],G,OnProjPts,OnProjIneq,false);
+  Display(Concatenation("stats:  No. of LPs solved = ",String(rlist1[3][1]),", \n\t No. of facets = ",String(Size(rlist1[2])),", \n\tDD stepsizes beyond initial hull = ",String(rlist1[3][2]) ));
+  rrA:=[];
+  rrb:=[];
+  for row in rlist1[2] do
+    # find the bounding sum-to-one inequality
+    onemap := function ( x ) return 1; end;
+    if not row=List([1..Size(row)],onemap) then
+      Append(rrA,[row{[1..Size(row)-1]}]);
+      Append(rrb,[row[Size(row)]]);
+    fi;
+  od;
+  # inequality transversal
+  trans_ineq:= [];
+  Oi:=OrbitsDomain(G,rrA,OnProjIneq);
+  for O in Oi do
+    Append(trans_ineq,[O[1]]);
+  od;
+  return [trans_ineq, RRparse(ncinstance,trans_ineq)];#[rlist1[1],rlist1[2]];
+end;
+
+idsc1:=[[ [[1,2,3],[1,2,3,4]],[[1,2,3],[1,2,3,5]],[[1,2,3],[1,2,3,6]], [[4,5,6],[1,4,5,6]], [[4],[2,4]], [[5],[2,5]], [[6],[2,6]],
+[[4,5],[3,4,5]], [[4,6],[3,4,6]], [[5,6],[3,5,6]] ],3,6];
+
+idsc2:=[[ [[1,2,3],[]],[[],[]],[[],[]],[[],[]],[[],[]] ],3,6];
+
+NCRateRegionOB3:=function(ncinstance,usesym,optargs)
+  local rlist,A,b,linrows,G,rlist1,ineq,ineqorb,row,rrA,rrb,onemap,nslist,idx,nsrec,symcons,los,lolos,Oi,O,trans_ineq;
+  rlist:=NCShannonBounded(ncinstance);
+  A:=rlist[1];
+  b:=rlist[2];
+  linrows:=rlist[3];
+  #Comnpute symmetry group of ncinstance
+  if usesym=false then
+    G:=Group([()]);
+  else
+    G:=NetSymGroup(ncinstance);
+  fi;
+  #if non-shannons are specified for some subsets, include all permutations of them
+  if Size(optargs)>0 then
+    nslist:=[];
+    nsrec:=optargs[1];
+    for idx in RecNamesInt(nsrec) do
+      lolos:=nsrec.(idx);
+      for los in lolos do
+        if idx = 1 then
+          ineq:= ZYNonShannon(los,ncinstance[3]);
+          ineqorb:=Orbit(G,ineq,OnEntropySpace);
+          Append(nslist,ineqorb);
+        else
+          ineq:= DFZNonShannon(idx-1,los,ncinstance[3]);
+          ineqorb:=Orbit(G,ineq,OnEntropySpace);
+          Append(nslist,ineqorb);
+        fi;
+      od;
+    od;
+    Append(A,nslist);
+    Append(b,ZeroMutable([1..Size(nslist)]));
+  fi;
+
+  # add symmetry constraints to the Polyhedron
+  if usesym = true then
+    Display(Concatenation("Original LP dimension...",String(Size(A[1])-RankMat(A{linrows})-1)));
+    symcons:=NCSymmetryCons_proj(ncinstance);
+    Display(Concatenation("LP dimension after considering symmetries...",String(Size(A[1])-RankMat(Concatenation(A{linrows},symcons))-1)));
+    if Size(symcons)>0 then
+      Append(linrows,[Size(A)+1..Size(A)+Size(symcons)]);
+      Append(A,symcons);
+      Append(b,ZeroMutable([1..Size(symcons)]));
+    fi;
+  fi;
+  # compute projection
   rlist1:=symCHM(A,b,linrows,ncinstance[3],G,OnProjPts,OnProjIneq,false);
   Display(Concatenation("stats:  No. of LPs solved = ",String(rlist1[3][1]),", \n\t No. of facets = ",String(Size(rlist1[2])),", \n\tDD stepsizes beyond initial hull = ",String(rlist1[3][2]) ));
   rrA:=[];
