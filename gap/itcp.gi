@@ -877,21 +877,44 @@ local NSG,pset,pset_orbs,cons,conlin,orb,j;
   return cons;
 end;
 
+CleanOrbs:= function(ncinstance)
+local NSG,pset,pset_orbs,cons,conlin,orb,j, clean_pset_orbs,clean_orb,s,con,goodorb;
+  NSG:=NetSymGroup(ncinstance);
+  pset:=Combinations([1..ncinstance[3]]);
+  pset:=pset{[2..Size(pset)]};
+  pset_orbs:=OrbitsDomain(NSG,pset,OnSets);
+  clean_pset_orbs:=[];
+  for orb in pset_orbs do
+    goodorb:=true;
+    for s in orb do
+      for con in ncinstance[1] do
+        if s=con[1] or s = con[2] or s=[1..ncinstance[2]] then
+          goodorb:= false;
+        fi;
+      od;
+    od;
+    if goodorb=false then
+      Append(clean_pset_orbs,[orb]);
+    fi;
+  od;
+  return clean_pset_orbs;
+end;
+
 NCSymmetryCons_proj:=function(ncinstance)#,optargs)
 local NSG,pset,pset_orbs,cons,conlin,orb,j;
   # if Size(optargs) =1 then
   #   NSG:=optargs[1];
   # else
-    NSG:=NetSymGroup(ncinstance);
-  # fi;
-  # construct orbitwise inequalities
-  pset:=Combinations([1..ncinstance[3]]);
-  pset:=pset{[2..Size(pset)]};
-  pset_orbs:=OrbitsDomain(NSG,pset,OnSets);
+  #   NSG:=NetSymGroup(ncinstance);
+  # # fi;
+  # # construct orbitwise inequalities
+  # pset:=Combinations([1..ncinstance[3]]);
+  # pset:=pset{[2..Size(pset)]};
+  # pset_orbs:=OrbitsDomain(NSG,pset,OnSets);
   cons:=[];
-  Display(pset_orbs);
+  # Display(pset_orbs);
   #Display(Size(pset_orbs));
-  for orb in pset_orbs do
+  for orb in CleanOrbs(ncinstance) do
     if Size(orb[1])<ncinstance[3] and Size(orb)>1 then
       for j in [1..Size(orb)-1] do
         conlin:=ZeroMutable([1..2^ncinstance[3]-1+ncinstance[3]]);
@@ -1798,7 +1821,121 @@ OnEntropySpacePowerSetByMat:=function(rays,M)
 end;
 
 
+NKKVars:= function(n,k)
+  local i,vlist, t, tp;
+  vlist := [];
+  for i in [1..n] do
+    Append(vlist,[[i]]);
+  od;
+  t := Tuples([1..n],2);
+  for tp in t do
+    if not tp[1]=tp[2] then
+      Append(vlist,[tp]);
+    fi;
+  od;
+  return vlist;
+end;
 
+
+OnNKKvars:=function(v,g)
+  if Size(v)=2 then
+    return [OnPoints(v[1],g), OnPoints(v[2],g)];
+  fi;
+  return [OnPoints(v[1],g)];
+end;
+
+OnNKKvarsSets:=function(s,g)
+  local v,res;
+  res:=[];
+  for v in s do
+    Append(res,[OnNKKvars(v,g)]);
+  od;
+  return SortedList(res);
+end;
+
+NKKRepairVars:=function(n,k)
+  local i,vlist, t, tp;
+  vlist := [];
+  t := Tuples([1..n],2);
+  for tp in t do
+    if not tp[1]=tp[2] then
+      Append(vlist,[tp]);
+    fi;
+  od;
+  return vlist;
+end;
+
+NKKStorageVars:=function(n,k)
+  local x;
+  x:=[1..n];
+  Apply(x,i->[i]);
+  return x;
+end;
+
+NKKHelperOutVars:=function(n,k,i)
+  local res, j;
+  res:= [];
+  for j in [1..n] do
+    if not j=i then
+      Append(res,[[i,j]]);
+    fi;
+  od;
+  return res;
+end;
+
+NKKHelperInVars:= function(n,k,i)
+  local res, j;
+  res:= [];
+  for j in [1..n] do
+    if not j=i then
+      Append(res,[[j,i]]);
+    fi;
+  od;
+  return res;
+end;
+
+grNKKSet:=function(n,k,A)
+  local grA,hasgrown,i,S,osize;
+  grA:=Set(A);
+  hasgrown := true;
+  while hasgrown do
+    hasgrown:=false;
+    for i in [1..n] do
+      if [i] in grA then
+        osize:= Size(grA);
+        Append(grA,NKKHelperOutVars(n,k,i));
+        grA:= Set(grA);
+        if Size(grA)>osize then
+          hasgrown:=true;
+        fi;
+      fi;
+    od;
+    for i in [1..n] do
+      S:=Set(NKKHelperInVars(n,k,i));
+      IntersectSet(S,grA);
+      if Size(S)>=n-1 then
+        osize:= Size(grA);
+        Append(grA,[[i]]);
+        grA:= Set(grA);
+        if Size(grA)>osize then
+          hasgrown:=true;
+        fi;
+      fi;
+    od;
+  od;
+  return grA;
+end;
+
+repNKKSet:=function(n,k,A)
+  local grA;
+  grA:=grNKKSet(n,k,A);
+  IntersectSet(grA,Set(NKKStorageVars(k,k)));
+  if Size(grA)>= k then
+    return ["B"];
+  else
+    return A;
+  fi;
+end;
 
 GenVonNeumannUnbounded:=function(n)
 # Returns [A,b] s.t. Ax<=b are the inequalities
