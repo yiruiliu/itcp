@@ -9,7 +9,7 @@
 ##
 ################################################################################
 
-# Utility functions
+## Utility functions
 
 if not IsBound(DeepCopy_lol) then
 DeepCopy_lol:=function(lol)
