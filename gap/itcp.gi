@@ -1949,6 +1949,19 @@ repNKKSet:=function(n,k,A,rnonc2canonical)
 end;
 ###new functions for NKK repair by Yirui ##########
 # main function
+NKKtradeoffcurve:=function(n,k)
+local LAb,A,b,linrows,k1,G;
+LAb:=NKKdegenerateinequality(n,k);
+linrows:=LAb[1];
+A:=LAb[2];
+b:=LAb[3];
+k1:=2;
+G:=Group([()]);
+tradeoffcurve:=symCHM(A,b,linrows,k1,G,OnProjPts,OnProjIneq,false);
+return tradeoffcurve;
+end;
+
+# polyhedra genertation
 NKKdegenerateinequality:=function(n,k)
 local vars,ocanonical,o,canonical,r2,r1,LAb;
 vars:=NKKVars(n,k);
@@ -1958,7 +1971,7 @@ canonical:=ocanonical[2];
 r2:=nonc2canonical(o,n,k);
 r1:=NKKcanonical2gr(canonical,r2,n,k);
 list:=NKKinequality_no_degerate(r1,r2,n,k);
-LAb:=LinrowsandAb(list);
+LAb:=LinrowsandAb(list,n,k,r1,r2);
 # LAb[1] is the indices of equivalent constraints
 # LAb[2] is the A matrix
 # LAb[3] is the b vector
@@ -2109,138 +2122,142 @@ end;
 
 #NKK inequality generator
 NKKinequality_no_degerate:=function(canonical2gr,nonc2canonical,n,kk)
-local list, l, ii, nkk, i, j, xi, xj, XK, k, Xk, set1, set2, set3, set4, int1, int2, int3,
-int4, r1, r2, h1, h2, h3, h4, H, Co, HH, CCo, i1, j1, indicator, k1, lstr, lset;
-r1:=canonical2gr;
-r2:=nonc2canonical;
-list:=NKKVars(n,kk);
-  l := [];
+local list,ii, l, ll, i, j, xi, xj, XK,  Xk, set1, set2, set3, set4, int1, int2, int3,
+int4, r1, r2, h1, h2, h3, h4, H, Co, HH, CCo, i1, j1, indicator, k1, lstr,lset,list1;
+  r1:=canonical2gr;
+  r2:=nonc2canonical;
+  list:=NKKVars(n,kk);
+  #ll:=Set([]);
+  l:=[];
   ii:=0;
-  nkk:=n+n*kk;
-  for i in [1..nkk-1] do
-  for j in [i+1..nkk] do
-  xi:=list[i];
-  xj:=list[j];
-  XK:=Difference(list,[xi,xj]);
-  for k in [1..2^(nkk-2)-1] do
-  Xk:=NKKint2set_anylist(k,XK);
-  set1:=Union(Xk,[xi]);
-  set2:=Xk;
-  set3:=Union(Xk,[xi],[xj]);
-  set4:=Union(Xk,[xj]);
-  int1:=NKKset2int(set1,n,kk);
-  int2:=NKKset2int(set2,n,kk);
-  int3:=NKKset2int(set3,n,kk);
-  int4:=NKKset2int(set4,n,kk);
-  h1:=r1.(r2.(int1));
-  h2:=r1.(r2.(int2));
-  h3:=r1.(r2.(int3));
-  h4:=r1.(r2.(int4));
+    for i in IteratorOfCombinations(list,2) do
+      xi:=i[1];
+      xj:=i[2];
+      XK:=Difference(list,i);
+      for j in [1..Size(XK)] do
+        for Xk in IteratorOfCombinations(XK,j) do
+          set1:=Union(Xk,[xi]);
+          set2:=Xk;
+          set3:=Union(Xk,[xi],[xj]);
+          set4:=Union(Xk,[xj]);
+          int1:=NKKset2int(set1,n,kk);
+          int2:=NKKset2int(set2,n,kk);
+          int3:=NKKset2int(set3,n,kk);
+          int4:=NKKset2int(set4,n,kk);
+          h1:=r1.(r2.(int1));
+          h2:=r1.(r2.(int2));
+          h3:=r1.(r2.(int3));
+          h4:=r1.(r2.(int4));
 
-  if not ((h1=h3 and h2=h4) or (h1=h2 and h3=h4) )then
-  H:=[h1,h2,h3,h4];
-  Co:=[1,-1,-1,1];
-  HH:=[];
-  CCo:=[];
-  HH[1]:=H[1];
-  CCo[1]:=Co[1];
-  for i1 in [2..Size(H)] do
-  indicator:=0;
-  for j1 in [1..Size(HH)] do
-  if H[i1]=HH[j1] then
-  CCo[j1]:=CCo[j1]+Co[i1];
-  indicator:=1;
-  fi;
-  od;
-  if indicator=0 then
-  Append(HH,[H[i1]]);
-  Append(CCo,[Co[i1]]);
-  fi;
-  od;
+          if not ((h1=h3 and h2=h4) or (h1=h2 and h3=h4) )then
+            H:=[h1,h2,h3,h4];
+            Co:=[1,-1,-1,1];
+            HH:=[];
+            CCo:=[];
+            HH[1]:=H[1];
+            CCo[1]:=Co[1];
+              for i1 in [2..Size(H)] do
+                indicator:=0;
+                for j1 in [1..Size(HH)] do
+                  if H[i1]=HH[j1] then
+                    CCo[j1]:=CCo[j1]+Co[i1];
+                    indicator:=1;
+                  fi;
+                od;
+                if indicator=0 then
+                  Append(HH,[H[i1]]);
+                  Append(CCo,[Co[i1]]);
+                fi;
+              od;
+            #l:=[];
+            ii:=ii+1;
+            l[ii]:=rec();
+              for k1 in [1..Size(HH)] do
+                if HH[k1]=-1 then
+                  HH[k1]:=0;
+                fi;
+                if CCo[k1]<>0 then
+                  l[ii].(HH[k1]):=CCo[k1];
+                fi;
+              od;
+            #lstr := List(l,String);
+            #ll:=Union(ll,lstr);
+          fi;
+        od;
+      od;
+    od;
 
-  ii:=ii+1;
-  l[ii]:=rec();
-for k1 in [1..Size(HH)] do
-if HH[k1]=-1 then
-HH[k1]:=0;
-fi;
-if CCo[k1]<>0 then
-  l[ii].(HH[k1]):=CCo[k1];
-  fi;
- od;
-fi;
+      for i in IteratorOfCombinations(list,2) do
+        xi:=i[1];
+        xj:=i[2];
+        set1:=[xi];
+        set2:=Union([xi],[xj]);
+        set3:=[xj];
+        int1:=NKKset2int(set1,n,kk);
+        int2:=NKKset2int(set2,n,kk);
+        int3:=NKKset2int(set3,n,kk);
+        h1:=r1.(r2.(int1));
+        h2:=r1.(r2.(int2));
+        h3:=r1.(r2.(int3));
+        H:=[h1,h2,h3];
+        Co:=[1,-1,1];
+        HH:=[];
+        CCo:=[];
+        HH[1]:=H[1];
+        CCo[1]:=Co[1];
+          for i1 in [2..Size(H)] do
+            indicator:=0;
+            for j1 in [1..Size(HH)] do
+              if H[i1]=HH[j1] then
+                CCo[j1]:=CCo[j1]+Co[i1];
+                indicator:=1;
+              fi;
+            od;
+            if indicator=0 then
+              Append(HH,[H[i1]]);
+              Append(CCo,[Co[i1]]);
+            fi;
+          od;
+        ii:=ii+1;
+        l[ii]:=rec();
+          for k1 in [1..Size(HH)] do
+            if HH[k1]=-1 then
+              HH[k1]:=0;
+            fi;
+            if CCo[k1]<>0 then
+              l[ii].(HH[k1]):=CCo[k1];
+            fi;
+          od;
+        #lstr := List(l,String);
+        #ll:=Union(ll,lstr);
+      od;
 
-  od;
-  od;
-  od;
-  for i in [1..nkk-1] do
-  for j in [i+1..nkk] do
-  xi:=list[i];
-  xj:=list[j];
-  set1:=[xi];
-  set2:=Union([xi],[xj]);
-  set3:=[xj];
-  int1:=NKKset2int(set1,n,kk);
-  int2:=NKKset2int(set2,n,kk);
-  int3:=NKKset2int(set3,n,kk);
-  h1:=r1.(r2.(int1));
-  h2:=r1.(r2.(int2));
-  h3:=r1.(r2.(int3));
-  H:=[h1,h2,h3];
-  Co:=[1,-1,1];
-  HH:=[];
-  CCo:=[];
-  HH[1]:=H[1];
-  CCo[1]:=Co[1];
-  for i1 in [2..Size(H)] do
-  indicator:=0;
-  for j1 in [1..Size(HH)] do
-  if H[i1]=HH[j1] then
-  CCo[j1]:=CCo[j1]+Co[i1];
-  indicator:=1;
-  fi;
-  od;
-  if indicator=0 then
-  Append(HH,[H[i1]]);
-  Append(CCo,[Co[i1]]);
-  fi;
-  od;
-  ii:=ii+1;
-  l[ii]:=rec();
-for k1 in [1..Size(HH)] do
-if HH[k1]=-1 then
-HH[k1]:=0;
-fi;
-if CCo[k1]<>0 then
-  l[ii].(HH[k1]):=CCo[k1];
-  fi;
- od;
-  od;
-  od;
-  for i in [1..Size(list)] do
-  xi:=list[i];
-  XK:=Difference(list,[xi]);
-  int1:=NKKset2int(list,n,kk);
-  int2:=NKKset2int(XK,n,kk);
-  h1:=r1.(r2.(int1));
-  h2:=r1.(r2.(int2));
-  if h1-h2<>0 then
-  ii:=ii+1;
-  l[ii]:=rec();
-  HH:=[h1,h2];
-  CCo:=[1,-1];
-  for k1 in [1..Size(HH)] do
-if HH[k1]=-1 then
-HH[k1]:=0;
-fi;
-  l[ii].(HH[k1]):=CCo[k1];
- od;
-  fi;
-  od;
-  lstr := List(l,String);
-  lset:=Set(lstr);
-  list:=Str2Rec(lset);
-  return list;
+      for i in [1..Size(list)] do
+        xi:=list[i];
+        XK:=Difference(list,[xi]);
+        int1:=NKKset2int(list,n,kk);
+        int2:=NKKset2int(XK,n,kk);
+        h1:=r1.(r2.(int1));
+        h2:=r1.(r2.(int2));
+        if h1-h2<>0 then
+          ii:=ii+1;
+          l[ii]:=rec();
+          HH:=[h1,h2];
+          CCo:=[1,-1];
+          for k1 in [1..Size(HH)] do
+            if HH[k1]=-1 then
+              HH[k1]:=0;
+            fi;
+            l[ii].(HH[k1]):=CCo[k1];
+           od;
+           #lstr := List(l,String);
+           #ll:=Union(ll,lstr);
+        fi;
+      od;
+    lstr := List(l,String);
+    lset:=Set(lstr);
+    list1:=Str2Rec(lset);
+  return list1;
   end;
 
 Str2Rec:=function(lset)
@@ -2340,9 +2357,11 @@ RecNameslist:=function(reclist)
  return r;
  end;
 
- Reclist2Ab:=function(reclist)
- local r1,rcnames, A, column, i, a, j, az, N, k, B;
+  Reclist2Ab:=function(reclist,n,k,canonical2gr,nonc2canonical)
+ local r1,rr1,rr2,rcnames, A, column, i, a,j,alphaindex,betaindex, az, N, k1, B;
  r1:=Reclist2Aindex(reclist);
+ rr1:=canonical2gr;
+ rr2:=nonc2canonical;
  rcnames:=RecNameslist(reclist);
  A:=[];
  column:=Size(rcnames)+1;
@@ -2350,15 +2369,17 @@ RecNameslist:=function(reclist)
  for j in [1..column] do
  Append(a,[0]);
  od;
+ alphaindex:=rr1.(rr2.(NKKset2int([[1]],n,k)));
  a[1]:=-1;
- a[r1.(113)-1]:=1;
+ a[r1.(alphaindex)-1]:=1;
  Append(A,[a]);
   a:=[];
  for j in [1..column] do
  Append(a,[0]);
  od;
+ betaindex:=rr1.(rr2.(NKKset2int([[1,2]],n,k)));
  a[2]:=-1;
- a[r1.(16)-1]:=1;
+ a[r1.(betaindex)-1]:=1;
  Append(A,[a]);
    a:=[];
  for j in [1..column] do
@@ -2367,7 +2388,7 @@ RecNameslist:=function(reclist)
  a[1]:=1;
  a[2]:=1;
  Append(A,[a]);
- B:=[0,0,1];
+ B:=[0,0,4];
  for i in [1..Size(reclist)] do
  a:=[];
  for j in [1..column] do
@@ -2376,11 +2397,11 @@ RecNameslist:=function(reclist)
  az:=ShallowCopy(reclist[i]);
  N:=Str2Rec(RecNames(az));
  Append(B,[0]);
- for k in [1..Size(N)] do
- if r1.(N[k])<>3 then
- a[r1.(N[k])-1]:=-az.(N[k]);
+ for k1 in [1..Size(N)] do
+ if r1.(N[k1])<>3 then
+ a[r1.(N[k1])-1]:=-az.(N[k1]);
  else
- B[i+3]:=az.(N[k]);
+ B[i+3]:=az.(N[k1]);
  fi;
  od;
  Append(A,[a]);
@@ -2388,7 +2409,7 @@ RecNameslist:=function(reclist)
  return [A,B];
  end;
 
-LinrowsandAb:=function(list)
+ LinrowsandAb:=function(list,n,k,canonical2gr,nonc2canonical)
  local aA, list2, leq, linrows, Ab;
  aA:=EqualRec(list);
  list2:=aA[2];
@@ -2399,10 +2420,9 @@ LinrowsandAb:=function(list)
  Append(linrows,[i]);
  fi;
  od;
- Ab:=Reclist2Ab(list2);
+ Ab:=Reclist2Ab(list2,n,k,canonical2gr,nonc2canonical);
  return [linrows, Ab[1], Ab[2]];
  end;
-
 
 ###################################################
 
